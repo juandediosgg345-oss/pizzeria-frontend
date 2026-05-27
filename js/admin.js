@@ -1,5 +1,5 @@
 // admin.js — Panel de administrador
-var API_BASE = 'http://pizzhawaiiana-001-site1.qtempurl.com/api';
+var API_BASE = '/api';
 
 let datosProductosCache  = [];
 let gruposProductos      = {};
