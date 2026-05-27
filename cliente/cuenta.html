@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzería La Hawaiiana - Cuenta</title>
+    <link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script>
+        (function () {
+            var t = localStorage.getItem('temaPizzeria');
+            if (t === 'oscuro') document.documentElement.classList.add('modo-oscuro');
+        })();
+    </script>
+    <script src="../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="../js/obscuro.js" defer></script>
+    <script src="../js/global.js" defer></script>
+    <script src="../js/validacion.js" defer></script>
+    <script src="../js/cuenta.js" defer></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <img src="../img/pizza.png" alt="Logo pizzería" width="40">
+            Pizzería La Hawaiiana
+        </a>
+        <button class="navbar-toggler d-lg-none" type="button" id="btn-mobile-menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="d-none d-lg-flex ms-auto align-items-center gap-2">
+            <a class="nav-link" href="index.html">Inicio</a>
+            <a class="nav-link" href="menu.html">Menú</a>
+            <a class="nav-link" href="cuenta.html">Cuenta</a>
+            <a class="nav-link" href="pedido.html">Mi pedido</a>
+            <button id="btn-tema" class="btn-rojo">Cambiar Tema</button>
+        </div>
+    </div>
+</nav>
+
+<!-- MENÚ MÓVIL -->
+<div class="offcanvas offcanvas-end offcanvas-menu" tabindex="-1" id="menuMobile">
+    <div class="offcanvas-header">
+        <span class="offcanvas-title">
+            <img src="../img/pizza.png" alt="" width="28"> Pizzería La Hawaiiana
+        </span>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <a class="menu-item-movil" href="index.html">
+            <i class="bi bi-house-fill icono-menu"></i> Inicio
+        </a>
+        <a class="menu-item-movil" href="menu.html">
+            <i class="bi bi-grid-fill icono-menu"></i> Menú
+        </a>
+        <a class="menu-item-movil activo" href="cuenta.html">
+            <i class="bi bi-person-circle icono-menu"></i> Cuenta
+        </a>
+        <a class="menu-item-movil" href="pedido.html">
+            <i class="bi bi-bag-check-fill icono-menu"></i> Mi Pedido
+        </a>
+        <hr class="menu-separador">
+        <button class="menu-item-movil btn-tema-movil" data-btn-tema>
+            <i class="bi bi-moon-stars-fill icono-menu"></i> Cambiar Tema
+        </button>
+    </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="container my-5 mw-500">
+
+    <!-- Panel: sesión ya activa -->
+    <div id="panel-sesion-activa" style="display:none;">
+        <div class="tarjeta-tema p-4 shadow-sm text-center">
+            <i class="bi bi-person-check-fill icono-acento-xl"></i>
+            <h4 class="texto-principal mt-3 mb-1">
+                ¡Hola, <span id="nombre-sesion" class="texto-acento"></span>!
+            </h4>
+            <p class="texto-secundario mb-4 small">Ya tienes una sesión activa.</p>
+            <div class="d-flex flex-column gap-2">
+                <a href="micuenta.html" class="btn btn-rojo">
+                    <i class="bi bi-person-circle"></i> Mi Cuenta
+                </a>
+                <a href="menu.html" class="btn btn-outline-secondary">
+                    <i class="bi bi-grid-fill"></i> Ver Menú
+                </a>
+                <button class="btn btn-outline-danger btn-sm mt-1" onclick="cerrarSesion()">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel: formularios de login y registro -->
+    <div id="panel-formularios">
+        <h2 class="text-center">Mi Cuenta</h2>
+
+        <ul class="nav nav-pills nav-justified mb-4" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-login" type="button">
+                    <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-registro" type="button">
+                    <i class="bi bi-person-plus-fill"></i> Registrarse
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content tarjeta-tema p-4 shadow-sm">
+
+            <!-- Formulario: Login -->
+            <div class="tab-pane fade show active" id="tab-login" role="tabpanel">
+                <p class="texto-secundario mb-3 small">
+                    <i class="bi bi-shield-lock-fill texto-acento"></i>
+                    Ingresa los datos con los que te registraste.
+                </p>
+                <form id="form-login" onsubmit="iniciarSesion(event); return false;">
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Nombre</label>
+                        <input type="text" class="form-control" id="login-nombre"
+                               placeholder="Tu nombre (como lo registraste)" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Teléfono</label>
+                        <input type="tel" class="form-control" id="login-telefono" inputmode="numeric" pattern="[0-9]{10}" maxlength="10"
+                               placeholder="10 dígitos" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Contraseña</label>
+                        <input type="password" class="form-control" id="login-password"
+                               placeholder="Tu contraseña" required>
+                    </div>
+                    <button type="submit" class="btn btn-rojo w-100">
+                        <i class="bi bi-box-arrow-in-right"></i> Entrar
+                    </button>
+                </form>
+            </div>
+
+            <!-- Formulario: Registro -->
+            <div class="tab-pane fade" id="tab-registro" role="tabpanel">
+                <form id="form-registro" onsubmit="return validarFormulario(event)">
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Nombre *</label>
+                        <input type="text" class="form-control" id="nombre" placeholder="Tu nombre completo">
+                        <span class="error" id="error-nombre">El nombre es obligatorio.</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Apellido *</label>
+                        <input type="text" class="form-control" id="apellido" placeholder="Tus apellidos">
+                        <span class="error" id="error-apellido">El apellido es obligatorio.</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Teléfono (10 dígitos) *</label>
+                        <input type="tel" class="form-control" id="telefono" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="Ej: 7891234567">
+                        <span class="error" id="error-telefono">Debe tener 10 dígitos.</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Contraseña *</label>
+                        <input type="password" class="form-control" id="password-registro"
+                               placeholder="Mínimo 6 caracteres">
+                        <span class="error" id="error-password">Mínimo 6 caracteres.</span>
+                    </div>
+                    <button type="submit" class="btn btn-rojo w-100">
+                        <i class="bi bi-person-check-fill"></i> Registrarme
+                    </button>
+                </form>
+                <div id="msg-exito" class="alert alert-success mt-3" style="display:none;">
+                    Registro exitoso. Bienvenido a Pizzería La Hawaiiana.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<footer><h5>Pizzería La Hawaiiana</h5></footer>
+<script>
+// Bloquear negativos, letras y caracteres no numéricos en todos los inputs tipo tel/número
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('input[type="tel"], input[inputmode="numeric"]').forEach(function (inp) {
+        inp.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '').slice(0, 10);
+        });
+        inp.addEventListener('keydown', function (e) {
+            if (e.key === '-' || e.key === 'e' || e.key === '+' || e.key === '.') e.preventDefault();
+        });
+    });
+});
+</script>
+</body>
+</html>

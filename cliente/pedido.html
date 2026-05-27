@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzería La Hawaiiana - Mi pedido</title>
+    <link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script>
+        (function(){var t=localStorage.getItem('temaPizzeria');if(t==='oscuro')document.documentElement.classList.add('modo-oscuro');})();
+    </script>
+    <script src="../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="../js/obscuro.js" defer></script>
+    <script src="../js/global.js" defer></script>
+    <script src="../js/carrito.js" defer></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <img src="../img/pizza.png" alt="Logo pizzería" width="40">
+            <span class="d-none d-sm-inline ms-1">Pizzería La Hawaiiana</span>
+        </a>
+        <button class="navbar-toggler d-lg-none" type="button" id="btn-mobile-menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="d-none d-lg-flex ms-auto align-items-center gap-2">
+            <a class="nav-link" href="index.html">Inicio</a>
+            <a class="nav-link" href="menu.html">Menú</a>
+            <a class="nav-link" href="cuenta.html">Cuenta</a>
+            <a class="nav-link active" href="pedido.html">Mi pedido</a>
+            <button id="btn-tema" class="btn-rojo">Cambiar Tema</button>
+        </div>
+    </div>
+</nav>
+
+<!-- MENÚ MÓVIL -->
+<div class="offcanvas offcanvas-end offcanvas-menu" tabindex="-1" id="menuMobile">
+    <div class="offcanvas-header">
+        <span class="offcanvas-title">
+            <img src="../img/pizza.png" alt="" width="28"> Pizzería La Hawaiiana
+        </span>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <a class="menu-item-movil" href="index.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-house-fill icono-menu"></i> Inicio
+        </a>
+        <a class="menu-item-movil" href="menu.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-grid-fill icono-menu"></i> Menú
+        </a>
+        <a class="menu-item-movil" href="cuenta.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-person-circle icono-menu"></i> Cuenta
+        </a>
+        <a class="menu-item-movil activo" href="pedido.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-bag-fill icono-menu"></i> Mi Pedido
+        </a>
+        <hr class="menu-separador">
+        <button class="menu-item-movil btn-tema-movil" data-btn-tema>
+            <i class="bi bi-moon-stars-fill icono-menu"></i> Cambiar Tema
+        </button>
+    </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="container mt-4 mb-5">
+    <h2>Mi Pedido</h2>
+
+    <div id="seccion-estado" style="display:none;" class="mb-4">
+        <div class="tarjeta-tema p-4 shadow-sm borde-acento-izq">
+            <h5 class="texto-principal mb-3">
+                <i class="bi bi-clock-history"></i> Último pedido
+            </h5>
+            <div class="row align-items-center">
+                <div class="col-auto icono-estado-pedido" id="estado-icono">
+                    <i class="bi bi-bag-fill"></i>
+                </div>
+                <div class="col">
+                    <p class="texto-estado-pedido mb-1" style="font-size:1.1rem;" id="estado-texto">En preparación</p>
+                    <p class="texto-secundario mb-1 small"><strong>Folio:</strong> <span id="estado-id">—</span></p>
+                    <p class="texto-secundario mb-1 small"><strong>Tiempo estimado:</strong> <span id="estado-tiempo">25-35 min</span></p>
+                    <p class="texto-secundario mb-0 small"><strong>Pago:</strong> <span id="estado-metodo">—</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="seccion-confirmacion" style="display:none;" class="mb-4">
+        <div class="alert alert-success">
+            <h5><i class="bi bi-check-circle-fill"></i> Pedido realizado con éxito</h5>
+            <p class="mb-1"><strong>Folio:</strong> <span id="confirm-id">—</span></p>
+            <p class="mb-1"><strong>Tipo:</strong> <span id="confirm-tipo">—</span></p>
+            <p class="mb-1"><strong>Pago:</strong> <span id="confirm-metodo">—</span></p>
+            <p class="mb-1"><strong>Hora:</strong> <span id="confirm-hora">—</span></p>
+            <p class="mb-0"><strong>Total:</strong> <span id="confirm-total">—</span></p>
+        </div>
+    </div>
+
+    <div id="seccion-pedido">
+        <div class="row g-4">
+
+            <!-- Columna: productos en el carrito -->
+            <div class="col-lg-7">
+                <div id="carrito-vacio" class="tarjeta-tema p-5 text-center" style="display:none;">
+                    <i class="bi bi-bag-x" style="font-size:3rem; color:var(--text-muted);"></i>
+                    <h5 class="texto-secundario mt-3">Tu carrito está vacío</h5>
+                    <a href="menu.html" class="btn btn-rojo mt-2">
+                        <i class="bi bi-grid-fill"></i> Ver Menú
+                    </a>
+                </div>
+
+                <div id="carrito-con-items" style="display:none;">
+                    <div class="tarjeta-tema p-4 shadow-sm mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="texto-principal mb-0">
+                                <i class="bi bi-bag-fill"></i> Productos
+                            </h5>
+                            <button class="btn btn-sm btn-outline-danger" onclick="vaciarCarrito()">
+                                <i class="bi bi-trash3"></i> Vaciar
+                            </button>
+                        </div>
+                        <div id="lista-carrito"></div>
+                    </div>
+
+                    <div class="tarjeta-tema p-4 shadow-sm">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="texto-principal">Subtotal:</span>
+                            <span class="texto-principal" id="subtotal-carrito">$0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="texto-principal">Envío:</span>
+                            <span class="texto-principal" id="envio-carrito">Gratis</span>
+                        </div>
+                        <hr style="border-color:var(--border-tarjeta);">
+                        <div class="d-flex justify-content-between">
+                            <span class="texto-principal"><strong>Total:</strong></span>
+                            <span class="precio-destacado" style="font-size:1.3rem;" id="total-carrito">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna: datos del pedido -->
+            <div class="col-lg-5">
+                <div class="tarjeta-tema p-4 shadow-sm">
+                    <h5 class="texto-principal mb-4">
+                        <i class="bi bi-person-lines-fill"></i> Datos del pedido
+                    </h5>
+
+                    <div id="seccion-requiere-login" style="display:none;">
+                        <div class="alert alert-warning text-center">
+                            <i class="bi bi-lock-fill" style="font-size:1.8rem;"></i>
+                            <p class="mb-2 mt-2">Debes iniciar sesión para realizar un pedido.</p>
+                            <a href="cuenta.html" class="btn btn-rojo btn-sm">
+                                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                            </a>
+                        </div>
+                    </div>
+
+                    <div id="seccion-datos-pedido" style="display:none;">
+                        <form id="form-pedido" onsubmit="return enviarPedido(event)">
+                            <div class="mb-3">
+                                <label class="form-label texto-principal">Nombre</label>
+                                <input type="text" class="form-control input-readonly" id="ped-nombre"
+                                       placeholder="Cargando..." readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label texto-principal">Teléfono</label>
+                                <input type="tel" class="form-control input-readonly" id="ped-tel"
+                                       placeholder="Cargando..." readonly maxlength="10">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label texto-principal">Tipo de entrega</label>
+                                <select class="form-select" id="tipo-entrega">
+                                    <option value="domicilio">A domicilio</option>
+                                    <option value="local">Recoger en sucursal</option>
+                                </select>
+                            </div>
+                            <div id="seccion-direccion" class="mb-3"></div>
+                            <div class="mb-4">
+                                <label class="form-label texto-principal">Método de pago</label>
+                                <select class="form-select" id="metodo-pago">
+                                    <option value="efectivo">Efectivo</option>
+                                    <option value="tarjeta">Tarjeta (en entrega)</option>
+                                    <option value="transferencia">Transferencia</option>
+                                </select>
+                            </div>
+                            <button type="submit" id="btn-pagar" class="btn btn-rojo w-100 btn-lg">
+                                <i class="bi bi-send-fill"></i> Confirmar Pedido
+                            </button>
+                            <a href="menu.html" class="btn btn-outline-secondary w-100 mt-2">
+                                <i class="bi bi-arrow-left"></i> Seguir comprando
+                            </a>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer><h5>Pizzería La Hawaiiana</h5></footer>
+</body>
+</html>

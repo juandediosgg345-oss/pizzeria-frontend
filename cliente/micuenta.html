@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzería La Hawaiiana - Mi Cuenta</title>
+    <link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script>
+        (function(){var t=localStorage.getItem('temaPizzeria');if(t==='oscuro')document.documentElement.classList.add('modo-oscuro');})();
+    </script>
+    <script src="../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="../js/obscuro.js" defer></script>
+    <script src="../js/global.js" defer></script>
+    <script src="../js/micuenta.js" defer></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <img src="../img/pizza.png" alt="Logo pizzería" width="40">
+            <span class="d-none d-sm-inline ms-1">Pizzería La Hawaiiana</span>
+        </a>
+        <button class="navbar-toggler d-lg-none" type="button" id="btn-mobile-menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="d-none d-lg-flex ms-auto align-items-center gap-2">
+            <a class="nav-link" href="index.html">Inicio</a>
+            <a class="nav-link" href="menu.html">Menú</a>
+            <a class="nav-link" href="micuenta.html">Mi Cuenta</a>
+            <a class="nav-link" href="pedido.html">Mi pedido</a>
+            <button id="btn-tema" class="btn-rojo">Cambiar Tema</button>
+        </div>
+    </div>
+</nav>
+
+<!-- MENÚ MÓVIL -->
+<div class="offcanvas offcanvas-end offcanvas-menu" tabindex="-1" id="menuMobile">
+    <div class="offcanvas-header">
+        <span class="offcanvas-title">
+            <img src="../img/pizza.png" alt="" width="28"> Pizzería La Hawaiiana
+        </span>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <a class="menu-item-movil" href="index.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-house-fill icono-menu"></i> Inicio
+        </a>
+        <a class="menu-item-movil" href="menu.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-grid-fill icono-menu"></i> Menú
+        </a>
+        <a class="menu-item-movil activo" href="micuenta.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-person-circle icono-menu"></i> Mi Cuenta
+        </a>
+        <a class="menu-item-movil" href="pedido.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-bag-fill icono-menu"></i> Mi Pedido
+        </a>
+        <hr class="menu-separador">
+        <button class="menu-item-movil btn-tema-movil" data-btn-tema>
+            <i class="bi bi-moon-stars-fill icono-menu"></i> Cambiar Tema
+        </button>
+    </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="container my-5 mw-860">
+    <h2><i class="bi bi-person-circle"></i> Mi Cuenta</h2>
+
+    <ul class="nav nav-pills nav-justified mb-4" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-datosenvio" type="button">
+                <i class="bi bi-geo-alt-fill"></i> Direcciones
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-pedidos" type="button">
+                <i class="bi bi-clock-history"></i> Pedidos
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-perfil" type="button">
+                <i class="bi bi-person-fill"></i> Perfil
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+
+        <!-- Tab: Direcciones -->
+        <div class="tab-pane fade show active" id="tab-datosenvio" role="tabpanel">
+            <div class="tarjeta-tema p-4 shadow-sm">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="texto-principal mb-0">
+                        <i class="bi bi-house-fill"></i> Direcciones de entrega
+                    </h5>
+                    <button class="btn btn-rojo btn-sm" id="btn-agregar-dir">
+                        <i class="bi bi-plus-lg"></i> Agregar
+                    </button>
+                </div>
+                <div id="lista-direcciones">
+                    <p class="texto-secundario">Cargando...</p>
+                </div>
+                <div id="form-dir-sec" style="display:none;" class="mt-3 tarjeta-tema p-3">
+                    <h6 class="texto-principal mb-3">Nueva Dirección</h6>
+                    <form id="form-direccion">
+                        <div class="mb-3">
+                            <label class="form-label texto-principal">Alias</label>
+                            <input type="text" class="form-control" id="dir-alias" placeholder="Ej: Mi casa">
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-8">
+                                <label class="form-label texto-principal">Calle *</label>
+                                <input type="text" class="form-control" id="dir-calle"
+                                       placeholder="Nombre de la calle" required>
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label texto-principal">Número *</label>
+                                <input type="text" class="form-control" id="dir-numExterior"
+                                       placeholder="45" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label texto-principal">Colonia *</label>
+                            <input type="text" class="form-control" id="dir-colonia"
+                                   placeholder="Nombre de la colonia" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label texto-principal">Referencias</label>
+                            <input type="text" class="form-control" id="dir-referencia"
+                                   placeholder="Ej: Casa verde, frente a la tienda">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-rojo btn-sm">
+                                <i class="bi bi-check-lg"></i> Guardar
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-sm"
+                                    onclick="document.getElementById('form-dir-sec').style.display='none'">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Historial -->
+        <div class="tab-pane fade" id="tab-pedidos" role="tabpanel">
+            <div class="tarjeta-tema p-4 shadow-sm">
+                <h5 class="texto-principal mb-3">
+                    <i class="bi bi-bag-heart-fill"></i> Historial de Pedidos
+                </h5>
+                <div id="historial-pedidos">
+                    <p class="texto-secundario">Cargando...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Perfil -->
+        <div class="tab-pane fade" id="tab-perfil" role="tabpanel">
+            <div class="tarjeta-tema p-4 shadow-sm">
+                <h5 class="texto-principal mb-3">
+                    <i class="bi bi-person-badge-fill"></i> Mis Datos
+                </h5>
+                <div id="datos-usuario">
+                    <p class="texto-secundario">Cargando...</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<footer><h5>Pizzería La Hawaiiana</h5></footer>
+</body>
+</html>

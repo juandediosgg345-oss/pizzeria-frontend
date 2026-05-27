@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzería La Hawaiiana - Inicio</title>
+    <link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script>
+        (function () {
+            var t = localStorage.getItem('temaPizzeria');
+            if (t === 'oscuro') document.documentElement.classList.add('modo-oscuro');
+        })();
+    </script>
+    <script src="../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="../js/global.js" defer></script>
+    <script src="../js/obscuro.js" defer></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <img src="../img/pizza.png" alt="Logo pizzería" width="40">
+            <span class="d-none d-sm-inline ms-1">Pizzería La Hawaiiana</span>
+        </a>
+        <button class="navbar-toggler d-lg-none" type="button" id="btn-mobile-menu" aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="d-none d-lg-flex ms-auto align-items-center gap-2">
+            <a class="nav-link" href="index.html">Inicio</a>
+            <a class="nav-link" href="menu.html">Menú</a>
+            <a class="nav-link" href="cuenta.html">Cuenta</a>
+            <a class="nav-link" href="pedido.html">Mi pedido</a>
+            <button id="btn-tema" class="btn-rojo">Cambiar Tema</button>
+        </div>
+    </div>
+</nav>
+
+<!-- MENÚ MÓVIL (offcanvas lateral) -->
+<div class="offcanvas offcanvas-end offcanvas-menu" tabindex="-1" id="menuMobile" aria-labelledby="menuMobileLabel">
+    <div class="offcanvas-header">
+        <span class="offcanvas-title" id="menuMobileLabel">
+            <img src="../img/pizza.png" alt="" width="28"> Pizzería La Hawaiiana
+        </span>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body">
+        <a class="menu-item-movil activo" href="index.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-house-fill icono-menu"></i> Inicio
+        </a>
+        <a class="menu-item-movil" href="menu.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-grid-fill icono-menu"></i> Menú
+        </a>
+        <a class="menu-item-movil" href="cuenta.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-person-circle icono-menu"></i> Cuenta
+        </a>
+        <a class="menu-item-movil" href="pedido.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-bag-check-fill icono-menu"></i> Mi Pedido
+        </a>
+        <hr class="menu-separador">
+        <button class="menu-item-movil btn-tema-movil" data-btn-tema>
+            <i class="bi bi-moon-stars-fill icono-menu"></i> Cambiar Tema
+        </button>
+    </div>
+</div>
+
+<!-- HERO: título de bienvenida -->
+<div class="container mt-5 text-center">
+    <h1 class="titulo-hero fw-bold" style="font-size:3rem;">
+        <span class="d-block">Bienvenido a Pizzería</span>
+        <span style="color:red;">La Hawaiiana</span>
+    </h1>
+    <a href="menu.html" class="btn btn-rojo btn-lg mt-2">Ver Menú</a>
+</div>
+
+<hr style="border-color:#555; margin:40px 0;">
+
+<!-- CARRUSEL DE ESPECIALIDADES -->
+<div class="container mb-5">
+    <h2 class="text-center">Nuestras especialidades</h2>
+    <div class="m-4">
+        <div id="carrusel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carrusel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#carrusel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#carrusel" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner tarjeta-tema">
+                <div class="carousel-item active">
+                    <div class="text-center py-5">
+                        <p><img src="../img/pizzaP.png" alt="Pizzas Preferidas" width="105"></p>
+                        <h3 class="texto-principal">Pizzas Preferidas</h3>
+                        <p class="texto-secundario">Hawaiana, Pepperoni, Diabla y más</p>
+                        <p class="precio-destacado">Desde $70</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="text-center py-5">
+                        <p><img src="../img/caja-de-pizza.png" alt="Pizzas Deluxe" width="105"></p>
+                        <h3 class="texto-principal">Pizzas Deluxe</h3>
+                        <p class="texto-secundario">Meat Lover, 3 Quesos, Napolitana y más</p>
+                        <p class="precio-destacado">Desde $80</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="text-center py-5">
+                        <p><img src="../img/pepitas.png" alt="Alitas y Snacks" width="105"></p>
+                        <h3 class="texto-principal">Alitas y Snacks</h3>
+                        <p class="texto-secundario">BBQ, Buffalo, Mango Habanero y más</p>
+                        <p class="precio-destacado">Desde $40</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carrusel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon icono-carrusel"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carrusel" data-bs-slide="next">
+                <span class="carousel-control-next-icon icono-carrusel"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- SECCIÓN: TAMAÑOS DISPONIBLES -->
+<div class="container mb-5">
+    <h2 class="text-center">Tamaños disponibles</h2>
+    <div class="row text-center mt-3">
+        <div class="col-6 col-md-4 col-lg-2 mb-4">
+            <div class="d-flex align-items-end justify-content-center mb-2" style="height:160px;">
+                <img src="../img/pizzaCom.png" alt="Individual" width="60" class="img-fluid">
+            </div>
+            <p class="texto-principal">Individual<br><span class="precio-destacado">$70</span></p>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-4">
+            <div class="d-flex align-items-end justify-content-center mb-2" style="height:160px;">
+                <img src="../img/pizzaCom.png" alt="Chica" width="75" class="img-fluid">
+            </div>
+            <p class="texto-principal">Chica<br><span class="precio-destacado">$95</span></p>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-4">
+            <div class="d-flex align-items-end justify-content-center mb-2" style="height:160px;">
+                <img src="../img/pizzaCom.png" alt="Mediana" width="95" class="img-fluid">
+            </div>
+            <p class="texto-principal">Mediana<br><span class="precio-destacado">$140</span></p>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-4">
+            <div class="d-flex align-items-end justify-content-center mb-2" style="height:160px;">
+                <img src="../img/pizzaCom.png" alt="Grande" width="115" class="img-fluid">
+            </div>
+            <p class="texto-principal">Grande<br><span class="precio-destacado">$200</span></p>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-4">
+            <div class="d-flex align-items-end justify-content-center mb-2" style="height:160px;">
+                <img src="../img/pizzaCom.png" alt="Jumbo" width="135" class="img-fluid">
+            </div>
+            <p class="texto-principal">Jumbo<br><span class="precio-destacado">$220</span></p>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 mb-4">
+            <div class="d-flex align-items-end justify-content-center mb-2" style="height:160px;">
+                <img src="../img/pizzaCom.png" alt="Super Mega" width="160" class="img-fluid">
+            </div>
+            <p class="texto-principal">Super Mega<br><span class="precio-destacado">$380</span></p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <h5 class="texto-principal">Pizzería La Hawaiiana</h5>
+    <div class="mt-3">
+        <p class="texto-principal mb-2">Dudas o pedidos especiales:</p>
+        <a href="https://www.facebook.com/pizzas.la.hawaiiana.huauchinango/" target="_blank" class="social-link me-2">
+            <img src="../img/Facebook_Logo_(2019).png" alt="Facebook" width="40">
+        </a>
+        <a href="https://wa.me/5217761067611" target="_blank" class="social-link">
+            <img src="../img/WhatsApp.svg.png" alt="WhatsApp" width="45">
+        </a>
+    </div>
+</footer>
+</body>
+</html>

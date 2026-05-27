@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzería La Hawaiiana - Menú</title>
+    <link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script>
+        (function(){ var t=localStorage.getItem('temaPizzeria'); if(t==='oscuro') document.documentElement.classList.add('modo-oscuro'); })();
+    </script>
+    <script src="../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="../js/obscuro.js" defer></script>
+    <script src="../js/global.js" defer></script>
+    <script src="../js/menu.js" defer></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">
+            <img src="../img/pizza.png" alt="Logo pizzería" width="40">
+            <span class="d-none d-sm-inline ms-1">Pizzería La Hawaiiana</span>
+        </a>
+        <div class="d-flex align-items-center gap-2 d-lg-none">
+            <a href="pedido.html" class="nav-carrito-wrap" style="color:var(--text-nav);">
+                <i class="bi bi-bag-fill" style="font-size:1.3rem;"></i>
+                <span class="badge-carrito">0</span>
+            </a>
+            <button class="navbar-toggler" type="button" id="btn-mobile-menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="d-none d-lg-flex ms-auto align-items-center gap-2">
+            <a class="nav-link" href="index.html">Inicio</a>
+            <a class="nav-link" href="menu.html">Menú</a>
+            <a class="nav-link" href="cuenta.html">Cuenta</a>
+            <a class="nav-link nav-carrito-wrap" href="pedido.html" title="Carrito">
+                <i class="bi bi-bag-fill"></i>
+                <span class="badge-carrito">0</span>
+            </a>
+            <button id="btn-tema" class="btn-rojo">Cambiar Tema</button>
+        </div>
+    </div>
+</nav>
+
+<!-- MENÚ MÓVIL -->
+<div class="offcanvas offcanvas-end offcanvas-menu" tabindex="-1" id="menuMobile">
+    <div class="offcanvas-header">
+        <span class="offcanvas-title">
+            <img src="../img/pizza.png" alt="" width="28"> Pizzería La Hawaiiana
+        </span>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <a class="menu-item-movil" href="index.html"><i class="bi bi-house-fill icono-menu"></i> Inicio</a>
+        <a class="menu-item-movil activo" href="menu.html"><i class="bi bi-grid-fill icono-menu"></i> Menú</a>
+        <a class="menu-item-movil" href="cuenta.html"><i class="bi bi-person-circle icono-menu"></i> Cuenta</a>
+        <a class="menu-item-movil" href="pedido.html"><i class="bi bi-bag-fill icono-menu"></i> Mi Pedido</a>
+        <hr class="menu-separador">
+        <button class="menu-item-movil btn-tema-movil" data-btn-tema>
+            <i class="bi bi-moon-stars-fill icono-menu"></i> Cambiar Tema
+        </button>
+    </div>
+</div>
+
+<!-- CATÁLOGO DE PRODUCTOS -->
+<div class="container mt-4 mb-5">
+
+    <h2>Menú</h2>
+
+    <div class="buscador-wrap mb-3">
+        <i class="bi bi-search"></i>
+        <input type="text" id="buscador-menu" class="form-control"
+               placeholder="Buscar producto... (ej: Hawaiiana, BBQ, Nuggets)">
+    </div>
+
+    <!-- Filtros móvil: select desplegable (solo visible en pantallas pequeñas) -->
+    <div class="mb-4 d-md-none">
+        <select class="form-select" id="select-filtro-cat" onchange="filtrar(this.value)">
+            <option value="todas">Todas las categorías</option>
+            <option value="preferida">Pizzas Preferidas</option>
+            <option value="deluxe">Pizzas Deluxe</option>
+            <option value="snack">Snacks</option>
+            <option value="alita">Alitas</option>
+            <option value="extra">Extras</option>
+            <option value="refresco">Refrescos</option>
+            <option value="promo">Promociones</option>
+        </select>
+    </div>
+
+    <!-- Filtros desktop: chips de categoría (ocultos en móvil) -->
+    <div class="filtros-scroll mb-4 d-none d-md-flex">
+        <button class="btn-filtro-cat activo" data-filtro="todas">
+            <i class="bi bi-grid-fill icono-filtro"></i> Todas
+        </button>
+        <button class="btn-filtro-cat" data-filtro="preferida">
+            <i class="bi bi-heart-fill icono-filtro"></i> Preferidas
+        </button>
+        <button class="btn-filtro-cat" data-filtro="deluxe">
+            <i class="bi bi-gem icono-filtro"></i> Deluxe
+        </button>
+        <button class="btn-filtro-cat" data-filtro="snack">
+            <i class="bi bi-bag-fill icono-filtro"></i> Snacks
+        </button>
+        <button class="btn-filtro-cat" data-filtro="alita">
+            <i class="bi bi-egg-fried icono-filtro"></i> Alitas
+        </button>
+        <button class="btn-filtro-cat" data-filtro="extra">
+            <i class="bi bi-plus-circle-fill icono-filtro"></i> Extras
+        </button>
+        <button class="btn-filtro-cat" data-filtro="refresco">
+            <i class="bi bi-cup-straw icono-filtro"></i> Refrescos
+        </button>
+        <button class="btn-filtro-cat" data-filtro="promo">
+            <i class="bi bi-tag-fill icono-filtro"></i> Promociones
+        </button>
+    </div>
+
+    <div class="row" id="contenedor-pizzas"></div>
+    <div id="paginacion-menu" class="mt-2 mb-4"></div>
+
+    <div id="sin-resultados">
+        <i class="bi bi-search" style="font-size:2.5rem; color:var(--text-muted);"></i>
+        <h5 class="texto-secundario mt-3">Sin resultados</h5>
+        <p class="texto-secundario small">Intenta con otro nombre o categoría.</p>
+        <button class="btn btn-rojo btn-sm" onclick="limpiarFiltros()">
+            <i class="bi bi-x-circle"></i> Limpiar filtros
+        </button>
+    </div>
+
+</div>
+
+<!-- MODAL: Selección de tamaño y cantidad -->
+<div class="modal fade" id="modalPedirPizza" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content tarjeta-tema">
+            <div class="modal-header">
+                <h5 class="modal-title texto-principal" id="modal-nombre-pizza">Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="texto-secundario mb-1">Elige el tamaño:</p>
+                <div id="botones-tamano"></div>
+                <div class="mt-4">
+                    <label class="form-label texto-principal">Cantidad:</label>
+                    <div class="d-flex align-items-center gap-3">
+                        <button type="button" class="btn btn-outline-secondary"
+                                onclick="var i=document.getElementById('modal-cantidad');i.value=Math.max(1,+i.value-1)">−</button>
+                        <input type="number" class="form-control text-center" id="modal-cantidad"
+                               min="1" value="1" style="max-width:80px;">
+                        <button type="button" class="btn btn-outline-secondary"
+                                onclick="var i=document.getElementById('modal-cantidad');i.value=+i.value+1">+</button>
+                    </div>
+                </div>
+                <div class="mb-1 mt-2">
+                    <label class="form-label texto-secundario mb-1" style="font-size:.85em;">
+                        <i class="bi bi-chat-left-text"></i> Nota / Observación <small class="texto-secundario">(opcional)</small>
+                    </label>
+                    <input type="text" class="form-control form-control-sm" id="modal-nota"
+                           placeholder="Ej: Sin cebolla, extra salsa, bien cocido...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-rojo" id="btn-confirmar-pizza">
+                    <i class="bi bi-bag-plus-fill"></i> Agregar al carrito
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST: Confirmación de producto añadido -->
+<div id="toast-carrito">
+    <i class="bi bi-check-circle-fill" style="color:#4caf50;"></i>
+    <span id="toast-mensaje">Agregado al carrito</span>
+</div>
+
+<footer><h5>Pizzería La Hawaiiana</h5></footer>
+</body>
+</html>
