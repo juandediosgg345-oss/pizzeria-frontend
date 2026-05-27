@@ -1,5 +1,5 @@
 // carrito.js — Carrito de compras: lógica local + checkout al API
-var API_BASE = 'http://pizzhawaiiana-001-site1.qtempurl.com/api';
+var API_BASE = '/api';
 var CLAVE_CARRITO = 'carritoHawaiiana';
 var CLAVE_PEDIDOS = 'pedidosHawaiiana';
 
