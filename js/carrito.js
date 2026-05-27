@@ -67,25 +67,34 @@ function renderCarrito() {
         total += sub;
 
         var fila = document.createElement('div');
-        fila.className = 'd-flex align-items-center gap-3 py-3';
+        // Se aplica flex-wrap y justify-content-between para que se adapte en móviles
+        fila.className = 'd-flex flex-wrap align-items-center justify-content-between gap-3 py-3';
         fila.style.borderBottom = '1px solid var(--border-tarjeta)';
-        fila.innerHTML =
-            '<div style="font-size:1.8rem;flex-shrink:0;"><i class="bi bi-bag-fill texto-acento"></i></div>' +
-            '<div class="flex-grow-1 min-w-0">' +
-            '<p class="texto-principal mb-0 text-truncate"><strong>' + item.nombre + '</strong></p>' +
-            '<small class="texto-secundario">' + (item.tamanio || '') + ' · $' + item.precio + ' c/u</small>' +
-            (item.observaciones ? '<br><small style="color:#e67e22;font-size:.8em;"><i class="bi bi-chat-left-text"></i> ' + item.observaciones + '</small>' : '') +
-            '</div>' +
-            '<div class="d-flex align-items-center gap-1 flex-shrink-0">' +
-            '<button type="button" class="btn btn-sm btn-outline-secondary px-2" style="min-width:28px;" ' +
-            'onclick="cambiarCantidad(\'' + item.clave + '\',-1)">−</button>' +
-            '<span class="texto-principal fw-bold px-1">' + item.cantidad + '</span>' +
-            '<button type="button" class="btn btn-sm btn-outline-secondary px-2" style="min-width:28px;" ' +
-            'onclick="cambiarCantidad(\'' + item.clave + '\',1)">+</button>' +
-            '</div>' +
-            '<span class="precio-destacado flex-shrink-0" style="min-width:56px;text-align:right;">$' + sub.toFixed(2) + '</span>' +
-            '<button type="button" class="btn btn-sm btn-outline-danger px-2 flex-shrink-0" ' +
-            'onclick="eliminarItem(\'' + item.clave + '\')"><i class="bi bi-x-lg"></i></button>';
+        
+        fila.innerHTML = `
+            <div class="d-flex align-items-center flex-grow-1" style="min-width: 150px;">
+                <div style="font-size:1.8rem; flex-shrink:0;" class="me-3">
+                    <i class="bi bi-bag-fill texto-acento"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="texto-principal mb-0 text-truncate"><strong>${item.nombre}</strong></p>
+                    <small class="texto-secundario">${item.tamanio || ''} · $${item.precio} c/u</small>
+                    ${item.observaciones ? `<br><small style="color:#e67e22;font-size:.8em;"><i class="bi bi-chat-left-text"></i> ${item.observaciones}</small>` : ''}
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-3 ms-auto">
+                <div class="d-flex align-items-center gap-1 flex-shrink-0">
+                    <button type="button" class="btn btn-sm btn-outline-secondary px-2" style="min-width:28px;" onclick="cambiarCantidad('${item.clave}',-1)">−</button>
+                    <span class="texto-principal fw-bold px-1">${item.cantidad}</span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary px-2" style="min-width:28px;" onclick="cambiarCantidad('${item.clave}',1)">+</button>
+                </div>
+                <span class="precio-destacado flex-shrink-0" style="min-width:56px; text-align:right;">$${sub.toFixed(2)}</span>
+                <button type="button" class="btn btn-sm btn-outline-danger px-2 flex-shrink-0" onclick="eliminarItem('${item.clave}')">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+        `;
 
         contenedor.appendChild(fila);
     });
