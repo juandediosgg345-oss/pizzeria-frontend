@@ -1,5 +1,5 @@
 // micuenta.js — Panel del cliente conectado al API
-var API_BASE = 'http://pizzhawaiiana-001-site1.qtempurl.com/api';
+var API_BASE = '/api';
 var _cacheDetalles = {};
 
 document.addEventListener('DOMContentLoaded', function () {
