@@ -2,7 +2,7 @@ var _promosCache    = [];   // Promociones vigentes para POS
 var _productoMapPOS = {};   // idProducto → precio para calcular descuento
 
 // pos.js — Punto de venta
-var API_BASE = 'http://pizzhawaiiana-001-site1.qtempurl.com/api';
+var API_BASE = '/api';
 
 var _empleado         = null;
 var catalogoGrupos    = [];
