@@ -1,5 +1,5 @@
 // cuenta.js — Login de cliente (nombre + teléfono + contraseña)
-var API_BASE = 'http://pizzhawaiiana-001-site1.qtempurl.com/api';
+var API_BASE = '/api';
 
 document.addEventListener('DOMContentLoaded', function () {
     verificarSesionActiva();
