@@ -1,6 +1,5 @@
 // empleado.js — Login de empleados y sesión activa
-var API_BASE = 'http://pizzhawaiiana-001-site1.qtempurl.com/api';
-
+var API_BASE = '/api';
 var RUTAS_CARGO = {
     Gerente:    'inicio.html',
     Cajero:     'pos.html',
