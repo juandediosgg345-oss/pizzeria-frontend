@@ -1,7 +1,6 @@
 var _pedidosEnCocina = [];
 // cocina.js — Panel de cocina
-var API_BASE = 'http://pizzhawaiiana-001-site1.qtempurl.com/api';
-var _empleado = null;
+var API_BASE = '/api';
 var _timer    = null;
 
 document.addEventListener('DOMContentLoaded', function () {
