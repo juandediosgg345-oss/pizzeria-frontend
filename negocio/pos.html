@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzería La Hawaiiana - POS</title>
+    <link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script>
+        (function () {
+            var t = localStorage.getItem('temaPizzeria');
+            if (t === 'oscuro') document.documentElement.classList.add('modo-oscuro');
+        })();
+    </script>
+    <script src="../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="../js/obscuro.js" defer></script>
+    <script src="../js/global.js" defer></script>
+    <script src="../js/pos.js" defer></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand" href="pos.html">
+            <img src="../img/pizza.png" alt="Logo pizzería" width="40">
+            <span class="d-none d-sm-inline ms-1">POS - La Hawaiiana</span>
+        </a>
+        <button class="navbar-toggler d-lg-none" type="button" id="btn-mobile-menu" aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="d-none d-lg-flex ms-auto align-items-center gap-2">
+            <span id="nav-nombre-empleado" class="nav-link texto-principal"></span>
+            <button id="btn-tema" class="btn-rojo">Cambiar Tema</button>
+        </div>
+    </div>
+</nav>
+
+<!-- MENÚ MÓVIL -->
+<div class="offcanvas offcanvas-end offcanvas-menu" tabindex="-1" id="menuMobile">
+    <div class="offcanvas-header">
+        <span class="offcanvas-title">
+            <img src="../img/pizza.png" alt="" width="28"> POS Cajero
+        </span>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <a class="menu-item-movil activo" href="pos.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-cash-register icono-menu"></i> Caja / POS
+        </a>
+        <hr class="menu-separador">
+        <button class="menu-item-movil btn-tema-movil" data-btn-tema>
+            <i class="bi bi-moon-stars-fill icono-menu"></i> Cambiar Tema
+        </button>
+        <a class="menu-item-movil menu-item-peligro" href="empleado.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-box-arrow-right icono-menu"></i> Cerrar Sesión
+        </a>
+    </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="container-fluid px-4 mt-4 pb-5">
+
+    <!-- Barra de estado de caja -->
+    <div class="alert alert-info mb-4 py-2">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+
+            <!-- Izquierda: estado y métricas -->
+            <div class="d-flex align-items-center gap-4 flex-wrap">
+                <div>
+                    <small class="d-block text-muted" style="font-size:.75em;">ESTADO</small>
+                    <strong>Caja: </strong><span id="estado-caja" class="badge bg-success">Abierta</span>
+                </div>
+                <div style="border-left:1px solid rgba(0,0,0,.15);padding-left:1rem;">
+                    <small class="d-block text-muted" style="font-size:.75em;">APERTURA</small>
+                    <strong style="cursor:pointer;border-bottom:1px dashed var(--bs-info-text-emphasis);"
+                            title="Clic para editar" onclick="editarMontoInicial()">
+                        $<span id="monto-inicial">0.00</span>
+                    </strong>
+                </div>
+                <div style="border-left:1px solid rgba(0,0,0,.15);padding-left:1rem;">
+                    <small class="d-block text-muted" style="font-size:.75em;">VENTAS HOY</small>
+                    <strong class="text-success"><span id="ventas-dia-pos">$0.00</span></strong>
+                </div>
+            </div>
+
+            <!-- Derecha: acciones de caja -->
+            <div class="d-flex gap-2 flex-shrink-0">
+                <button class="btn btn-sm btn-primary" onclick="cargarPedidosWebPOS()">
+                    <i class="bi bi-bell-fill"></i> Pedidos Web
+                </button>
+                <button class="btn btn-sm btn-warning" id="btn-cerrar-caja" onclick="cerrarCaja()">
+                    <i class="bi bi-lock-fill"></i> Cerrar Caja
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Layout: catálogo | resumen de venta -->
+    <div class="contenedor-pos">
+
+        <!-- Catálogo con filtros -->
+        <div>
+            <h3 class="texto-principal mb-3">Selecciona Productos</h3>
+            <div class="d-flex flex-wrap gap-2 mb-3" id="filtros-pos">
+                <button type="button" class="btn btn-outline-secondary btn-sm active"
+                        onclick="filtrarCategoriaPos('todas',this)">
+                    <i class="bi bi-list-ul"></i> Todas
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm"
+                        onclick="filtrarCategoriaPos('pizza',this)">
+                    <i class="bi bi-circle-fill"></i> Pizzas
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm"
+                        onclick="filtrarCategoriaPos('bebida',this)">
+                    <i class="bi bi-cup-straw"></i> Bebidas
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm"
+                        onclick="filtrarCategoriaPos('entrada',this)">
+                    <i class="bi bi-egg-fried"></i> Entradas
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-sm"
+                        onclick="filtrarCategoriaPos('promo',this)">
+                    <i class="bi bi-tag-fill"></i> Promociones
+                </button>
+            </div>
+            <div class="row g-2" id="grid-productos-pos"></div>
+        </div>
+
+        <!-- Resumen de venta actual -->
+        <div class="tarjeta-tema p-4 shadow-sm resumen-venta">
+            <h4 class="texto-principal mb-3">
+                <i class="bi bi-receipt"></i> Venta Actual
+            </h4>
+            <div id="detalles-venta" class="scroll-venta"></div>
+            <hr>
+            <div class="mb-3">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="texto-principal">Subtotal:</span>
+                    <span class="texto-principal" id="pos-subtotal">$0.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="texto-principal"><strong>Total:</strong></span>
+                    <span class="precio-destacado" style="font-size:1.4em;" id="pos-total">$0.00</span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label texto-principal">Método de Pago</label>
+                <select class="form-select" id="pos-metodo-pago">
+                    <option value="efectivo">Efectivo</option>
+                    <option value="tarjeta">Tarjeta</option>
+                    <option value="transferencia">Transferencia</option>
+                </select>
+            </div>
+            <button class="btn btn-success w-100 btn-lg mb-2" id="btn-cobrar">
+                <i class="bi bi-check-circle-fill"></i> Cobrar
+            </button>
+            <div id="confirmacion-pago" style="display:none;" class="mt-3">
+                <div class="alert alert-success">
+                    <h6><i class="bi bi-check-circle-fill"></i> Venta Realizada</h6>
+                    <p id="detalles-pago" class="mb-0 small"></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- MODAL: Cantidad y observaciones -->
+<div class="modal fade" id="modalCantidad" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content tarjeta-tema">
+            <div class="modal-header">
+                <h5 class="modal-title texto-principal" id="nombreProductoModal">Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="sec-tamano-pos" style="display:none;" class="mb-3"></div>
+                <div class="mb-3">
+                    <label class="form-label texto-principal">Cantidad:</label>
+                    <input type="number" class="form-control" id="cantidadInput" min="1" value="1">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label texto-principal">Observaciones (opcional):</label>
+                    <textarea class="form-control" id="observacionesInput" rows="2"
+                              placeholder="Ej: Sin cebolla, bien dorada"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-rojo" onclick="agregarAlPOS()">
+                    <i class="bi bi-plus-lg"></i> Agregar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Pedidos web pendientes -->
+<div class="modal fade" id="modalPedidosWeb" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content tarjeta-tema">
+            <div class="modal-header">
+                <h5 class="modal-title texto-principal">
+                    <i class="bi bi-bell-fill"></i> Pedidos Web Pendientes
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table tarjeta-tema">
+                        <thead>
+                            <tr>
+                                <th class="texto-principal">ID</th>
+                                <th class="texto-principal">Tipo</th>
+                                <th class="texto-principal">Total</th>
+                                <th class="texto-principal">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-pedidos-pos"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer><h5>Pizzería La Hawaiiana</h5></footer>
+</body>
+</html>

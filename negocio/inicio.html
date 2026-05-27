@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzería La Hawaiiana</title>
+    <link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script>
+        (function () {
+            var t = localStorage.getItem('temaPizzeria');
+            if (t === 'oscuro') document.documentElement.classList.add('modo-oscuro');
+        })();
+    </script>
+    <script>
+        // Acceso controlado: solo Gerente/Administrador pueden ver el selector de módulos
+        (function () {
+            var emp = JSON.parse(localStorage.getItem('empleadoHawaiiana') || 'null');
+
+            // Sin sesión → ir al login de empleados
+            if (!emp) { window.location.href = 'empleado.html'; return; }
+
+            // Redirigir según cargo (no-admin van directo a su panel)
+            var rutas = { Cajero: 'pos.html', Repartidor: 'repartidor.html', Cocinero: 'cocina.html' };
+            if (rutas[emp.cargo]) { window.location.href = rutas[emp.cargo]; return; }
+
+            // Gerente / Administrador → global.js pone el nombre en #nav-nombre-empleado
+        })();
+    </script>
+    <script src="../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="../js/obscuro.js" defer></script>
+    <script src="../js/global.js" defer></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand" href="inicio.html">
+            <img src="../img/pizza.png" alt="Logo" width="40">
+            <span class="d-none d-sm-inline ms-1">Pizzería La Hawaiiana</span>
+        </a>
+        <div class="d-none d-lg-flex ms-auto align-items-center gap-2">
+            <span id="nav-nombre-empleado" class="texto-principal me-1"></span>
+            <button id="btn-tema" class="btn-rojo">Cambiar Tema</button>
+        </div>
+    </div>
+</nav>
+
+<!-- SELECCIÓN DE ROL -->
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 texto-principal mb-2">Bienvenido</h1>
+        <p class="lead texto-secundario">Selecciona un módulo para navegar</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
+            <div class="row g-4 justify-content-center">
+
+                <!-- Cliente -->
+                <div class="col-6 col-lg-4">
+                    <div class="card-rol cliente" onclick="window.location.href='../cliente/index.html'">
+                        <div class="icono-rol">
+                            <i class="bi bi-person-fill" style="color:#667eea;"></i>
+                        </div>
+                        <div>
+                            <h5>Cliente</h5>
+                            <p>Hacer pedidos en línea</p>
+                        </div>
+                        <button class="btn btn-sm btn-primary w-100">Entrar</button>
+                    </div>
+                </div>
+
+                <!-- Cajero / POS -->
+                <div class="col-6 col-lg-4">
+                    <div class="card-rol cajero" onclick="window.location.href='pos.html'">
+                        <div class="icono-rol">
+                            <i class="bi bi-pc-display-horizontal" style="color:#ffc107;"></i>
+                        </div>
+                        <div>
+                            <h5>Cajero</h5>
+                            <p>Registrar ventas POS</p>
+                        </div>
+                        <button class="btn btn-sm btn-warning w-100">Entrar</button>
+                    </div>
+                </div>
+
+                <!-- Cocinero -->
+                <div class="col-6 col-lg-4">
+                    <div class="card-rol" onclick="window.location.href='cocina.html'"
+                         style="border-color:#6f42c1;background:rgba(111,66,193,.05);">
+                        <div class="icono-rol">
+                            <i class="bi bi-fire" style="color:#6f42c1;"></i>
+                        </div>
+                        <div>
+                            <h5 style="color:#6f42c1;">Cocina</h5>
+                            <p>Panel de pedidos en cocina</p>
+                        </div>
+                        <button class="btn btn-sm w-100" style="background:#6f42c1;color:#fff;">Entrar</button>
+                    </div>
+                </div>
+
+                <!-- Repartidor -->
+                <div class="col-6 col-lg-4">
+                    <div class="card-rol repartidor" onclick="window.location.href='repartidor.html'">
+                        <div class="icono-rol">
+                            <i class="bi bi-truck" style="color:#17a2b8;"></i>
+                        </div>
+                        <div>
+                            <h5>Repartidor</h5>
+                            <p>Gestionar entregas</p>
+                        </div>
+                        <button class="btn btn-sm btn-info w-100">Entrar</button>
+                    </div>
+                </div>
+
+                <!-- Admin -->
+                <div class="col-6 col-lg-4">
+                    <div class="card-rol admin" onclick="window.location.href='admin.html'">
+                        <div class="icono-rol">
+                            <i class="bi bi-speedometer2" style="color:#dc3545;"></i>
+                        </div>
+                        <div>
+                            <h5>Admin</h5>
+                            <p>Gestionar el negocio</p>
+                        </div>
+                        <button class="btn btn-sm btn-danger w-100">Entrar</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <h5>Pizzería La Hawaiiana</h5>
+</footer>
+</body>
+</html>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzería La Hawaiiana - Panel Administrador</title>
+    <link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script>
+        (function () {
+            var t = localStorage.getItem('temaPizzeria');
+            if (t === 'oscuro') document.documentElement.classList.add('modo-oscuro');
+        })();
+    </script>
+    <script src="../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="../js/obscuro.js" defer></script>
+    <script src="../js/global.js" defer></script>
+    <script src="../js/admin.js" defer></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand" href="admin.html">
+            <img src="../img/pizza.png" alt="Logo pizzería" width="40">
+            <span class="d-none d-sm-inline ms-1">Admin - La Hawaiiana</span>
+        </a>
+        <button class="navbar-toggler d-lg-none" type="button" id="btn-mobile-menu" aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="d-none d-lg-flex ms-auto align-items-center gap-2">
+            <span id="nav-nombre-empleado" class="nav-link texto-principal"></span>
+            <button id="btn-tema" class="btn-rojo">Cambiar Tema</button>
+        </div>
+    </div>
+</nav>
+
+<!-- MENÚ MÓVIL -->
+<div class="offcanvas offcanvas-end offcanvas-menu" tabindex="-1" id="menuMobile">
+    <div class="offcanvas-header">
+        <span class="offcanvas-title">
+            <img src="../img/pizza.png" alt="" width="28"> Admin Panel
+        </span>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <a class="menu-item-movil activo" href="admin.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-speedometer2 icono-menu"></i> Panel Admin
+        </a>
+        <hr class="menu-separador">
+        <button class="menu-item-movil btn-tema-movil" data-btn-tema>
+            <i class="bi bi-moon-stars-fill icono-menu"></i> Cambiar Tema
+        </button>
+        <a class="menu-item-movil menu-item-peligro" href="empleado.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-box-arrow-right icono-menu"></i> Cerrar Sesión
+        </a>
+    </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="container-fluid mt-4 px-4">
+
+    <ul class="nav nav-pills nav-justified mb-4" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-pedidos" data-bs-toggle="pill"
+                    data-bs-target="#pedidos" type="button">
+                <i class="bi bi-receipt d-none d-md-inline"></i> Pedidos
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-productos" data-bs-toggle="pill"
+                    data-bs-target="#productos" type="button">
+                <i class="bi bi-grid d-none d-md-inline"></i> Productos
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-empleados" data-bs-toggle="pill"
+                    data-bs-target="#empleados" type="button">
+                <i class="bi bi-people d-none d-md-inline"></i> Empleados
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-promociones" data-bs-toggle="pill"
+                    data-bs-target="#promociones" type="button">
+                <i class="bi bi-tag d-none d-md-inline"></i> Promociones
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-reportes" data-bs-toggle="pill"
+                    data-bs-target="#reportes" type="button">
+                <i class="bi bi-bar-chart d-none d-md-inline"></i> Reportes
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+
+        <!-- Tab: Pedidos -->
+        <div class="tab-pane fade show active" id="pedidos" role="tabpanel">
+            <h3 class="mb-4">Gestión de Pedidos</h3>
+            <div class="row mb-4">
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="tarjeta-tema p-3 text-center">
+                        <h6 class="texto-secundario">En Preparación</h6>
+                        <h2 class="precio-destacado" id="count-preparacion">0</h2>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="tarjeta-tema p-3 text-center">
+                        <h6 class="texto-secundario">En Camino</h6>
+                        <h2 class="precio-destacado" id="count-camino">0</h2>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="tarjeta-tema p-3 text-center">
+                        <h6 class="texto-secundario">Entregados Hoy</h6>
+                        <h2 class="precio-destacado" id="count-entregado">0</h2>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 mb-3">
+                    <div class="tarjeta-tema p-3 text-center">
+                        <h6 class="texto-secundario">Ventas Hoy</h6>
+                        <h2 class="precio-destacado" id="ventas-hoy">$0.00</h2>
+                    </div>
+                </div>
+            </div>
+            <!-- Buscador de pedidos por ID o nombre de cliente -->
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control" id="buscador-pedidos"
+                           placeholder="Buscar por ID de pedido o nombre de cliente..."
+                           oninput="buscarPedidos()">
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table tarjeta-tema">
+                    <thead>
+                        <tr>
+                            <th class="texto-principal">ID</th>
+                            <th class="texto-principal">Cliente</th>
+                            <th class="texto-principal">Total</th>
+                            <th class="texto-principal">Estado</th>
+                            <th class="texto-principal">Tipo</th>
+                            <th class="texto-principal">Cobró</th>
+                            <th class="texto-principal">Repartidor</th>
+                            <th class="texto-principal">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-pedidos"></tbody>
+                </table>
+            </div>
+            <!-- Controles de paginación para pedidos -->
+            <div id="paginacion-pedidos"></div>
+        </div>
+
+        <!-- Tab: Productos -->
+        <div class="tab-pane fade" id="productos" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                <h3>Gestión del Menú</h3>
+                <button class="btn btn-rojo" data-bs-toggle="modal" data-bs-target="#modalProducto">
+                    <i class="bi bi-plus-lg"></i> Nuevo Producto
+                </button>
+            </div>
+            <div class="row" id="lista-productos"></div>
+            <!-- Controles de paginación para productos -->
+            <div id="paginacion-productos"></div>
+        </div>
+
+        <!-- Tab: Empleados -->
+        <div class="tab-pane fade" id="empleados" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3>Gestión de Personal</h3>
+                <button class="btn btn-rojo" data-bs-toggle="modal" data-bs-target="#modalEmpleado">
+                    <i class="bi bi-person-plus-fill"></i> Nuevo Empleado
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table tarjeta-tema">
+                    <thead>
+                        <tr>
+                            <th class="texto-principal">Nombre</th>
+                            <th class="texto-principal">Cargo</th>
+                            <th class="texto-principal">Teléfono</th>
+                            <th class="texto-principal">Sueldo</th>
+                            <th class="texto-principal">Horario</th>
+                            <th class="texto-principal">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-empleados"></tbody>
+                </table>
+            </div>
+            <!-- Controles de paginación para empleados -->
+            <div id="paginacion-empleados"></div>
+        </div>
+
+        <!-- Tab: Promociones -->
+        <div class="tab-pane fade" id="promociones" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3>Promociones y Descuentos</h3>
+                <button class="btn btn-rojo" data-bs-toggle="modal" data-bs-target="#modalPromocion">
+                    <i class="bi bi-tag-fill"></i> Nueva Promoción
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table class="table tarjeta-tema">
+                    <thead>
+                        <tr>
+                            <th class="texto-principal">Nombre</th>
+                            <th class="texto-principal">Producto Aplicado</th>
+                            <th class="texto-principal">Descuento</th>
+                            <th class="texto-principal">Inicio</th>
+                            <th class="texto-principal">Fin</th>
+                            <th class="texto-principal">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-promociones"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab: Reportes -->
+        <div class="tab-pane fade" id="reportes" role="tabpanel">
+            <h3 class="mb-4">Reportes de Negocio</h3>
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <label class="form-label texto-principal">Fecha Inicio</label>
+                    <input type="date" class="form-control" id="fecha-inicio">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label texto-principal">Fecha Fin</label>
+                    <input type="date" class="form-control" id="fecha-fin">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label texto-principal">&nbsp;</label>
+                    <button class="btn btn-rojo w-100 d-block" onclick="generarReporte(false)">
+                        <i class="bi bi-bar-chart-fill"></i> Generar
+                    </button>
+                <small class="texto-secundario d-block mt-1" id="lbl-reporte-actualizado"></small>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="tarjeta-tema p-4">
+                        <h5 class="texto-principal">Ingresos por Método de Pago</h5>
+                        <p class="mb-2"><strong class="texto-principal">Efectivo:</strong> <span class="precio-destacado" id="reporte-efectivo">$0.00</span></p>
+                        <p class="mb-2"><strong class="texto-principal">Tarjeta:</strong> <span class="precio-destacado" id="reporte-tarjeta">$0.00</span></p>
+                        <p class="mb-0"><strong class="texto-principal">Transferencia:</strong> <span class="precio-destacado" id="reporte-transferencia">$0.00</span></p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="tarjeta-tema p-4">
+                        <h5 class="texto-principal">Ingresos por Canal</h5>
+                        <p class="mb-2"><strong class="texto-principal">Domicilio:</strong> <span class="precio-destacado" id="reporte-domicilio">$0.00</span></p>
+                        <p class="mb-0"><strong class="texto-principal">Mostrador:</strong> <span class="precio-destacado" id="reporte-mostrador">$0.00</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="tarjeta-tema p-4 mt-2">
+                <h5 class="texto-principal mb-2">Total del Período</h5>
+                <h2 class="precio-destacado" id="reporte-total">$0.00</h2>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- MODAL: Nuevo / Editar Producto -->
+<div class="modal fade" id="modalProducto" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content tarjeta-tema">
+            <div class="modal-header">
+                <h5 class="modal-title texto-principal">Nuevo Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formularioProducto">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Nombre *</label>
+                        <input type="text" class="form-control" id="prod-nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Categoría *</label>
+                        <select class="form-select" id="prod-categoria" required>
+                            <option value="">-- Selecciona --</option>
+                            <option value="preferida">Pizza Preferida</option>
+                            <option value="deluxe">Pizza Deluxe</option>
+                            <option value="bebida">Bebida / Refresco</option>
+                            <option value="entrada">Entrada / Alita</option>
+                            <option value="snack">Snack</option>
+                            <option value="extra">Extra</option>
+                            <option value="postre">Postre</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">¿Tiene múltiples tamaños?</label>
+                        <select class="form-select" id="prod-tiene-tamanos" onchange="toggleTamanosProd()">
+                            <option value="no">No (Tamaño único)</option>
+                            <option value="si">Sí (Varios tamaños y precios)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id="sec-precio-unico">
+                        <label class="form-label texto-principal">Precio *</label>
+                        <input type="number" class="form-control" id="prod-precio" step="0.01">
+                    </div>
+                    <div class="mb-3" id="sec-multi-tamanos" style="display:none; background:var(--bg-body); padding:10px; border-radius:8px;">
+                        <label class="form-label texto-principal d-block border-bottom border-secondary pb-1 mb-2">
+                            Activa los tamaños e ingresa su precio:
+                        </label>
+                        <div class="row g-2 mb-2 align-items-center">
+                            <div class="col-5"><div class="form-check"><input class="form-check-input chk-tamano" type="checkbox" value="Individual" id="chk-ind" onchange="toggleInputPrecio(this,'precio-ind')"><label class="form-check-label texto-principal" for="chk-ind">Individual</label></div></div>
+                            <div class="col-7"><input type="number" class="form-control form-control-sm input-precio-tam" id="precio-ind" placeholder="Precio ($)" disabled></div>
+                        </div>
+                        <div class="row g-2 mb-2 align-items-center">
+                            <div class="col-5"><div class="form-check"><input class="form-check-input chk-tamano" type="checkbox" value="Chica" id="chk-chi" onchange="toggleInputPrecio(this,'precio-chi')"><label class="form-check-label texto-principal" for="chk-chi">Chica</label></div></div>
+                            <div class="col-7"><input type="number" class="form-control form-control-sm input-precio-tam" id="precio-chi" placeholder="Precio ($)" disabled></div>
+                        </div>
+                        <div class="row g-2 mb-2 align-items-center">
+                            <div class="col-5"><div class="form-check"><input class="form-check-input chk-tamano" type="checkbox" value="Mediana" id="chk-med" onchange="toggleInputPrecio(this,'precio-med')"><label class="form-check-label texto-principal" for="chk-med">Mediana</label></div></div>
+                            <div class="col-7"><input type="number" class="form-control form-control-sm input-precio-tam" id="precio-med" placeholder="Precio ($)" disabled></div>
+                        </div>
+                        <div class="row g-2 mb-2 align-items-center">
+                            <div class="col-5"><div class="form-check"><input class="form-check-input chk-tamano" type="checkbox" value="Grande" id="chk-gra" onchange="toggleInputPrecio(this,'precio-gra')"><label class="form-check-label texto-principal" for="chk-gra">Grande</label></div></div>
+                            <div class="col-7"><input type="number" class="form-control form-control-sm input-precio-tam" id="precio-gra" placeholder="Precio ($)" disabled></div>
+                        </div>
+                        <div class="row g-2 mb-2 align-items-center">
+                            <div class="col-5"><div class="form-check"><input class="form-check-input chk-tamano" type="checkbox" value="Jumbo" id="chk-jum" onchange="toggleInputPrecio(this,'precio-jum')"><label class="form-check-label texto-principal" for="chk-jum">Jumbo</label></div></div>
+                            <div class="col-7"><input type="number" class="form-control form-control-sm input-precio-tam" id="precio-jum" placeholder="Precio ($)" disabled></div>
+                        </div>
+                        <div class="row g-2 mb-0 align-items-center">
+                            <div class="col-5"><div class="form-check"><input class="form-check-input chk-tamano" type="checkbox" value="Super mega" id="chk-sup" onchange="toggleInputPrecio(this,'precio-sup')"><label class="form-check-label texto-principal" for="chk-sup">Super mega</label></div></div>
+                            <div class="col-7"><input type="number" class="form-control form-control-sm input-precio-tam" id="precio-sup" placeholder="Precio ($)" disabled></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Descripción</label>
+                        <textarea class="form-control" id="prod-descripcion" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-rojo" id="btn-guardar-prod">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Nuevo / Editar Empleado -->
+<div class="modal fade" id="modalEmpleado" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content tarjeta-tema">
+            <div class="modal-header">
+                <h5 class="modal-title texto-principal">Nuevo Empleado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formularioEmpleado">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Nombre *</label>
+                        <input type="text" class="form-control" id="emp-nombre" placeholder="Nombre" required>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label texto-principal">Apellido Paterno *</label>
+                            <input type="text" class="form-control" id="emp-apPaterno" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label texto-principal">Apellido Materno *</label>
+                            <input type="text" class="form-control" id="emp-apMaterno" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Cargo *</label>
+                        <select class="form-select" id="emp-cargo" required>
+                            <option value="">-- Selecciona --</option>
+                            <option value="Cajero">Cajero</option>
+                            <option value="Cocinero">Cocinero</option>
+                            <option value="Repartidor">Repartidor</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Teléfono *</label>
+                        <input type="tel" class="form-control" id="emp-telefono" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Sueldo *</label>
+                        <input type="number" class="form-control" id="emp-sueldo"
+                               placeholder="Ej: 8000" min="0" step="100" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Horario</label>
+                        <input type="text" class="form-control" id="emp-horario" placeholder="Ej: 10:00 - 18:00">
+                    </div>
+                    <div class="mb-3" id="sec-placa-moto" style="display:none;">
+                        <label class="form-label texto-principal">Placa de Moto *</label>
+                        <input type="text" class="form-control" id="emp-placaMoto" placeholder="Ej: MX-1234">
+                        <small class="texto-secundario">Requerido para el módulo de repartidor.</small>
+                    </div>
+                    <!-- Tipo de servicio (solo visible si cargo = Repartidor) -->
+                    <div class="mb-3" id="sec-tipo-servicio" style="display:none;">
+                        <label class="form-label texto-principal">Tipo de Servicio</label>
+                        <div class="d-flex gap-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="servicio-tipo"
+                                       id="servicio-interno" value="Interno" checked
+                                       onchange="toggleServicioExterno()">
+                                <label class="form-check-label texto-principal" for="servicio-interno">
+                                    <i class="bi bi-building"></i> Interno (plantilla propia)
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="servicio-tipo"
+                                       id="servicio-externo-radio" value="Externo"
+                                       onchange="toggleServicioExterno()">
+                                <label class="form-check-label texto-principal" for="servicio-externo-radio">
+                                    <i class="bi bi-phone"></i> Externo (app de terceros)
+                                </label>
+                            </div>
+                        </div>
+                        <!-- Nombre del servicio externo (solo si seleccionó Externo) -->
+                        <div id="sec-nombre-servicio" style="display:none;" class="mt-2">
+                            <label class="form-label texto-principal">Nombre del Servicio *</label>
+                            <input type="text" class="form-control" id="emp-servicioExterno"
+                                   placeholder="Ej: Mandadito, Rappi, DiDi Food">
+                            <small class="texto-secundario">Plataforma de reparto externa que usa el repartidor.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-rojo">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Nueva Promoción -->
+<div class="modal fade" id="modalPromocion" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content tarjeta-tema">
+            <div class="modal-header">
+                <h5 class="modal-title texto-principal">Nueva Promoción</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formularioPromocion">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Nombre de Promoción *</label>
+                        <input type="text" class="form-control" id="promo-nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Agregar Producto a la Promoción</label>
+                        <div class="d-flex gap-2 flex-wrap align-items-end">
+                            <div class="flex-grow-1">
+                                <select class="form-select" id="promo-producto" onchange="cambioProductoPromo()">
+                                    <option value="">-- Selecciona un producto --</option>
+                                </select>
+                            </div>
+                            <div id="sec-promo-tamanio" style="display:none;">
+                                <select class="form-select" id="promo-tamanio"></select>
+                            </div>
+                            <button type="button" class="btn btn-outline-secondary" onclick="agregarProductoAPromo()">
+                                <i class="bi bi-plus-lg"></i> Agregar
+                            </button>
+                        </div>
+                        <!-- Lista de productos seleccionados para esta promoción -->
+                        <div id="lista-productos-promo" class="mt-2"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Descuento (%) *</label>
+                        <input type="number" class="form-control" id="promo-descuento" min="1" max="100" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Fecha Inicio *</label>
+                        <input type="date" class="form-control" id="promo-inicio" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Fecha Fin *</label>
+                        <input type="date" class="form-control" id="promo-fin" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label texto-principal">Condiciones de aplicación</label>
+                        <input type="text" class="form-control" id="promo-condiciones"
+                               list="lista-condiciones-promo" placeholder="Ej: Mostrador, Domicilio, Ambos..."
+                               value="Ambos">
+                        <datalist id="lista-condiciones-promo">
+                            <option value="Ambos">
+                            <option value="Mostrador">
+                            <option value="Domicilio">
+                        </datalist>
+                        <small class="texto-secundario">
+                            <i class="bi bi-info-circle"></i>
+                            Escribe una nueva condición y se guardará como opción para la próxima vez.
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-rojo" id="btn-guardar-promo">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Detalle del Pedido -->
+<div class="modal fade" id="modalDetallePedido" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content tarjeta-tema">
+            <div class="modal-header">
+                <h5 class="modal-title texto-principal">
+                    <i class="bi bi-receipt"></i> Detalle del Pedido
+                    <span id="dp-id" class="texto-acento ms-1"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="dp-body">
+                <!-- Contenido inyectado por admin.js → verDetallePedido() -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Ver detalles de Promoción -->
+<div class="modal fade" id="modalVerPromocion" tabindex="-1">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content tarjeta-tema">
+            <div class="modal-header">
+                <h5 class="modal-title texto-principal">
+                    <i class="bi bi-tag-fill texto-acento"></i>
+                    <span id="vp-nombre"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="vp-body">
+                <!-- Inyectado por admin.js → verDetallePromocion() -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Ficha del Empleado -->
+<div class="modal fade" id="modalInfoEmpleado" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content tarjeta-tema">
+            <div class="modal-header">
+                <h5 class="modal-title texto-principal">
+                    <i class="bi bi-person-badge-fill texto-acento"></i> Ficha del Empleado
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="emp-info-body">
+                <!-- Inyectado por admin.js → verInfoEmpleado() -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer><h5>Pizzería La Hawaiiana</h5></footer>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzería La Hawaiiana - Acceso Empleados</title>
+    <link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script>
+        (function () {
+            var t = localStorage.getItem('temaPizzeria');
+            if (t === 'oscuro') document.documentElement.classList.add('modo-oscuro');
+        })();
+    </script>
+    <script src="../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="../js/obscuro.js" defer></script>
+    <script src="../js/global.js" defer></script>
+    <script src="../js/empleado.js" defer></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="inicio.html">
+            <img src="../img/pizza.png" alt="Logo pizzería" width="40">
+            Pizzería La Hawaiiana
+        </a>
+        <button class="navbar-toggler d-lg-none" type="button" id="btn-mobile-menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="d-none d-lg-flex ms-auto align-items-center gap-2">
+            <button id="btn-tema" class="btn-rojo">Cambiar Tema</button>
+        </div>
+    </div>
+</nav>
+
+<!-- MENÚ MÓVIL -->
+<div class="offcanvas offcanvas-end offcanvas-menu" tabindex="-1" id="menuMobile">
+    <div class="offcanvas-header">
+        <span class="offcanvas-title">
+            <img src="../img/pizza.png" alt="" width="28"> Pizzería La Hawaiiana
+        </span>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+            <hr class="menu-separador">
+        <button class="menu-item-movil btn-tema-movil" data-btn-tema>
+            <i class="bi bi-moon-stars-fill icono-menu"></i> Cambiar Tema
+        </button>
+    </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="container my-5 mw-460">
+
+    <!-- Panel: sesión activa -->
+    <div id="panel-sesion-activa" style="display:none;">
+        <div class="tarjeta-tema p-4 shadow-sm text-center">
+            <i class="bi bi-person-badge-fill icono-acento-xl"></i>
+            <h4 class="texto-principal mt-3 mb-1">
+                ¡Hola, <span id="nombre-empleado" class="texto-acento"></span>!
+            </h4>
+            <p class="texto-secundario mb-1" id="cargo-empleado"></p>
+            <p class="texto-secundario mb-4 small">Ya tienes una sesión activa como empleado.</p>
+            <div class="d-flex flex-column gap-2">
+                <a href="#" id="btn-ir-panel" class="btn btn-rojo">
+                    <i class="bi bi-speedometer2"></i> Ir a mi panel
+                </a>
+                <!-- Accesos rápidos para el Gerente/Admin (se muestra vía empleado.js) -->
+                <div id="accesos-gerente" style="display:none;">
+                    <p class="texto-secundario small mb-2 mt-1">Acceso rápido a módulos:</p>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="pos.html" class="btn btn-sm btn-outline-warning flex-fill">
+                            <i class="bi bi-cash-register"></i> Caja / POS
+                        </a>
+                        <a href="cocina.html" class="btn btn-sm flex-fill" style="border-color:#6f42c1;color:#6f42c1;">
+                            <i class="bi bi-fire"></i> Cocina
+                        </a>
+                        <a href="repartidor.html" class="btn btn-sm btn-outline-info flex-fill">
+                            <i class="bi bi-truck"></i> Repartidor
+                        </a>
+                        <a href="admin.html" class="btn btn-sm btn-outline-danger flex-fill">
+                            <i class="bi bi-speedometer2"></i> Admin
+                        </a>
+                    </div>
+                </div>
+                <button class="btn btn-outline-danger btn-sm mt-1" onclick="cerrarSesionEmpleado()">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel: login de empleado -->
+    <div id="panel-login">
+        <div class="text-center mb-4">
+            <i class="bi bi-person-badge-fill icono-acento-xl"></i>
+            <h2 class="mt-2">Acceso Empleados</h2>
+            <p class="texto-secundario small">Exclusivo para personal de la pizzería.</p>
+        </div>
+
+        <div class="tarjeta-tema p-4 shadow-sm">
+            <form id="form-empleado" onsubmit="iniciarSesionEmpleado(event); return false;">
+                <div class="mb-3">
+                    <label class="form-label texto-principal">
+                        <i class="bi bi-person-vcard"></i> ID de Empleado
+                    </label>
+                    <input type="text" class="form-control" id="emp-id"
+                           placeholder="Ej: E001" required autocomplete="off">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label texto-principal">
+                        <i class="bi bi-telephone"></i> Teléfono de contacto
+                    </label>
+                    <input type="tel" class="form-control" id="emp-telefono" inputmode="numeric" pattern="[0-9]{10}" maxlength="10"
+                           placeholder="10 dígitos" required>
+                </div>
+                <button type="submit" class="btn btn-rojo w-100 btn-lg">
+                    <i class="bi bi-box-arrow-in-right"></i> Acceder
+                </button>
+                        <div id="error-login-emp" class="alert alert-danger mt-2 py-2" style="display:none;font-size:.9em;"></div>
+        </form>
+        </div>
+    </div>
+
+</div>
+
+<footer><h5>Pizzería La Hawaiiana</h5></footer>
+</body>
+</html>

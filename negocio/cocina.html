@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cocina - La Hawaiiana</title>
+    <link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script>
+        (function () {
+            var t = localStorage.getItem('temaPizzeria');
+            if (t === 'oscuro') document.documentElement.classList.add('modo-oscuro');
+        })();
+    </script>
+    <script src="../bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="../js/obscuro.js" defer></script>
+    <script src="../js/global.js" defer></script>
+    <script src="../js/cocina.js" defer></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand" href="cocina.html">
+            <img src="../img/pizza.png" alt="Logo" width="40">
+            <span class="d-none d-sm-inline ms-1">Cocina - La Hawaiiana</span>
+        </a>
+        <button class="navbar-toggler d-lg-none" type="button" id="btn-mobile-menu" aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="d-none d-lg-flex ms-auto align-items-center gap-2">
+            <span id="nav-nombre-empleado" class="nav-link texto-principal"></span>
+            <a href="inicio.html" id="btn-modulos-cocina"
+               class="btn btn-sm btn-outline-light" style="display:none;">
+                <i class="bi bi-grid-3x3-gap-fill"></i> Módulos
+            </a>
+            <button id="btn-tema" class="btn-rojo">Cambiar Tema</button>
+        </div>
+    </div>
+</nav>
+
+<!-- MENÚ MÓVIL -->
+<div class="offcanvas offcanvas-end offcanvas-menu" tabindex="-1" id="menuMobile">
+    <div class="offcanvas-header">
+        <span class="offcanvas-title">
+            <img src="../img/pizza.png" alt="" width="28"> Cocina
+        </span>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <span class="menu-item-movil" id="nombre-cocinero-mov"></span>
+        <hr class="menu-separador">
+        <button class="menu-item-movil btn-tema-movil" data-btn-tema>
+            <i class="bi bi-moon-stars-fill icono-menu"></i> Cambiar Tema
+        </button>
+        <a class="menu-item-movil menu-item-peligro" href="empleado.html" data-bs-dismiss="offcanvas">
+            <i class="bi bi-box-arrow-right icono-menu"></i> Cerrar Sesión
+        </a>
+    </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="container-fluid px-4 mt-4 pb-5">
+
+    <!-- Cabecera de sección -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h2 class="mb-0 texto-principal">
+                <i class="bi bi-fire texto-acento me-2"></i>Pedidos en Cocina
+            </h2>
+            <small class="texto-secundario">
+                Los pedidos marcados como <strong>Listos</strong> pasan al repartidor.
+            </small>
+        </div>
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+            <span class="badge bg-warning text-dark fs-6" id="badge-pendientes">0 pendientes</span>
+            <small class="texto-secundario" id="lbl-refresh"></small>
+            <button class="btn btn-sm btn-outline-secondary" onclick="cargarPedidosCocina()">
+                <i class="bi bi-arrow-clockwise"></i> Actualizar
+            </button>
+        </div>
+    </div>
+
+    <!-- Grid de pedidos -->
+    <div class="row g-3" id="grid-cocina"></div>
+
+</div>
+
+</body>
+</html>
