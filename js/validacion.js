@@ -2,7 +2,7 @@
 // Funciones: iniciarSesion(event) y validarFormulario(event)
 // Usadas directamente por onsubmit en cuenta.html
 
-var API_BASE = 'http://pizzhawaiiana-001-site1.qtempurl.com/api';
+var API_BASE = '/api';
 
 // ── Anti-negativos: bloquear teclas y limpiar no-dígitos en teléfonos ──────────
 document.addEventListener('DOMContentLoaded', function () {
