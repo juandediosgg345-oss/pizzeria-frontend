@@ -1,5 +1,5 @@
 // menu.js — Catálogo con paginación y fichas de pack para promociones
-var API_BASE = 'http://pizzhawaiiana-001-site1.qtempurl.com/api';
+var API_BASE = '/api';
 
 // Catálogo
 var pizzas           = [];
