@@ -16,8 +16,8 @@ var variacionSeleccionada = null;
 
 var ICONOS_CAT = {
     pizza:'bi-circle-fill', 
-    preferida:'../img/pizza-round-svgrepo-com.svg', 
-    deluxe:'../img/pizza-round-svgrepo-com.svg',
+    preferida:'../img/pizza-slice-svgrepo-com.svg', 
+    deluxe:'../img/pizza-slice-svgrepo-com.svg',
     bebida:'bi-cup-straw', 
     entrada:'../img/chicken-leg-svgrepo-com.svg', 
     snack:'../img/sausage-and-french-fries-svgrepo-com.svg', 
