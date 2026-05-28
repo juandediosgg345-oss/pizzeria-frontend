@@ -17,7 +17,6 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
         <a class="navbar-brand" href="index.html">
@@ -46,7 +45,6 @@
     </div>
 </nav>
 
-<!-- MENÚ MÓVIL -->
 <div class="offcanvas offcanvas-end offcanvas-menu" tabindex="-1" id="menuMobile">
     <div class="offcanvas-header">
         <span class="offcanvas-title">
@@ -66,7 +64,6 @@
     </div>
 </div>
 
-<!-- CATÁLOGO DE PRODUCTOS -->
 <div class="container mt-4 mb-5">
 
     <h2>Menú</h2>
@@ -77,7 +74,6 @@
                placeholder="Buscar producto... (ej: Hawaiiana, BBQ, Nuggets)">
     </div>
 
-    <!-- Filtros móvil: select desplegable (solo visible en pantallas pequeñas) -->
     <div class="mb-4 d-md-none">
         <select class="form-select" id="select-filtro-cat" onchange="filtrar(this.value)">
             <option value="todas">Todas las categorías</option>
@@ -91,7 +87,6 @@
         </select>
     </div>
 
-<!-- Filtros desktop: chips de categoría (ocultos en móvil) -->
     <div class="filtros-scroll mb-4 d-none d-md-flex">
         <button class="btn-filtro-cat activo" data-filtro="todas">
             <i class="bi bi-grid-fill icono-filtro"></i> Todas
@@ -119,9 +114,17 @@
         </button>
     </div>
 
+    <div class="row" id="contenedor-pizzas"></div>
+
+    <div id="sin-resultados" style="display:none;" class="text-center py-5">
+        <i class="bi bi-emoji-frown" style="font-size:3rem; color:var(--text-muted);"></i>
+        <h4 class="texto-secundario mt-3">No encontramos productos que coincidan.</h4>
+    </div>
+
+    <div id="paginacion-menu" class="mt-4"></div>
+
 </div>
 
-<!-- MODAL: Selección de tamaño y cantidad -->
 <div class="modal fade" id="modalPedirPizza" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content tarjeta-tema">
@@ -161,7 +164,6 @@
     </div>
 </div>
 
-<!-- TOAST: Confirmación de producto añadido -->
 <div id="toast-carrito">
     <i class="bi bi-check-circle-fill" style="color:#4caf50;"></i>
     <span id="toast-mensaje">Agregado al carrito</span>
