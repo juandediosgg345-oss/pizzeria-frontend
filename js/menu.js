@@ -19,8 +19,13 @@ var productoSeleccionado  = null;
 var variacionSeleccionada = null;
 
 var ICONOS_CAT = {
-    pizza:'bi-circle-fill', preferida:'bi-heart-fill', deluxe:'bi-gem',
-    bebida:'bi-cup-straw', entrada:'bi-egg-fried', snack:'bi-bag-fill', extra:'bi-plus-circle-fill'
+    pizza:'bi-circle-fill', 
+    preferida:'../img/pizza-round-svgrepo-com.svg', 
+    deluxe:'../img/pizza-round-svgrepo-com.svg',
+    bebida:'bi-cup-straw', 
+    entrada:'../img/chicken-leg-svgrepo-com.svg', // Nota: alita entra como 'entrada' en la API
+    snack:'../img/sausage-and-french-fries-svgrepo-com.svg', 
+    extra:'bi-plus-circle-fill'
 };
 
 // ── Carga del catálogo ────────────────────────────────────────────────────────
