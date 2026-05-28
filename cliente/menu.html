@@ -91,22 +91,22 @@
         </select>
     </div>
 
-    <!-- Filtros desktop: chips de categoría (ocultos en móvil) -->
+<!-- Filtros desktop: chips de categoría (ocultos en móvil) -->
     <div class="filtros-scroll mb-4 d-none d-md-flex">
         <button class="btn-filtro-cat activo" data-filtro="todas">
             <i class="bi bi-grid-fill icono-filtro"></i> Todas
         </button>
         <button class="btn-filtro-cat" data-filtro="preferida">
-            <i class="bi bi-heart-fill icono-filtro"></i> Preferidas
+            <img src="../img/pizza-round-svgrepo-com.svg" class="icono-filtro" width="16" alt="Preferidas"> Preferidas
         </button>
         <button class="btn-filtro-cat" data-filtro="deluxe">
-            <i class="bi bi-gem icono-filtro"></i> Deluxe
+            <img src="../img/pizza-round-svgrepo-com.svg" class="icono-filtro" width="16" alt="Deluxe"> Deluxe
         </button>
         <button class="btn-filtro-cat" data-filtro="snack">
-            <i class="bi bi-bag-fill icono-filtro"></i> Snacks
+            <img src="../img/sausage-and-french-fries-svgrepo-com.svg" class="icono-filtro" width="16" alt="Snacks"> Snacks
         </button>
         <button class="btn-filtro-cat" data-filtro="alita">
-            <i class="bi bi-egg-fried icono-filtro"></i> Alitas
+            <img src="../img/chicken-leg-svgrepo-com.svg" class="icono-filtro" width="16" alt="Alitas"> Alitas
         </button>
         <button class="btn-filtro-cat" data-filtro="extra">
             <i class="bi bi-plus-circle-fill icono-filtro"></i> Extras
@@ -116,18 +116,6 @@
         </button>
         <button class="btn-filtro-cat" data-filtro="promo">
             <i class="bi bi-tag-fill icono-filtro"></i> Promociones
-        </button>
-    </div>
-
-    <div class="row" id="contenedor-pizzas"></div>
-    <div id="paginacion-menu" class="mt-2 mb-4"></div>
-
-    <div id="sin-resultados">
-        <i class="bi bi-search" style="font-size:2.5rem; color:var(--text-muted);"></i>
-        <h5 class="texto-secundario mt-3">Sin resultados</h5>
-        <p class="texto-secundario small">Intenta con otro nombre o categoría.</p>
-        <button class="btn btn-rojo btn-sm" onclick="limpiarFiltros()">
-            <i class="bi bi-x-circle"></i> Limpiar filtros
         </button>
     </div>
 
