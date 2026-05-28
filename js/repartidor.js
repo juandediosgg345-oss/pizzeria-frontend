@@ -56,44 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     cargarPedidos();
-
-
-    // Sobreescribir botones de logout para marcar No disponible ANTES de salir
-    setTimeout(function () {
-        var btnNav = document.getElementById('btn-cerrar-sesion-nav');
-        if (btnNav) {
-            var clon = btnNav.cloneNode(true);
-            btnNav.parentNode.replaceChild(clon, btnNav);
-            clon.addEventListener('click', cerrarSesionRepartidor);
-        }
-        var offMov = document.getElementById('menuMobile');
-        if (offMov) {
-            offMov.querySelectorAll('a.menu-item-peligro').forEach(function (link) {
-                link.addEventListener('click', function (e) {
-                    e.preventDefault(); e.stopImmediatePropagation();
-                    cerrarSesionRepartidor();
-                });
-            });
-        }
-    }, 600);
 });
-
-// Marca No disponible en BD y luego cierra sesión
-async function cerrarSesionRepartidor() {
-    if (!confirm('¿Cerrar sesión?')) return;
-    if (_repartidorId && _repartidorId !== 'ADMIN') {
-        try {
-            await fetch(API_BASE + '/repartidores/' + _repartidorId + '/disponibilidad', {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ estado: 'No disponible' })
-            });
-        } catch (e) {}
-    }
-    localStorage.removeItem('empleadoHawaiiana');
-    window.location.href = 'empleado.html';
-}
-
 
 
 function _inyectarBotonModulos() {
