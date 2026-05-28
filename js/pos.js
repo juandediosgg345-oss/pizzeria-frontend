@@ -1,7 +1,6 @@
-var _promosCache    = [];   // Promociones vigentes para POS
-var _productoMapPOS = {};   // idProducto → precio para calcular descuento
+var _promosCache    = [];   
+var _productoMapPOS = {};   
 
-// pos.js — Punto de venta
 var API_BASE = '/api';
 
 var _empleado         = null;
@@ -13,9 +12,14 @@ var categoriaActual   = 'todas';
 var estadoCaja        = { abierta: true, montoInicial: 500.00 };
 
 var ICONOS_POS = {
-    pizza:'bi-circle-fill', preferida:'bi-heart-fill', deluxe:'bi-gem',
-    bebida:'bi-cup-straw', entrada:'bi-egg-fried', snack:'bi-bag-fill',
-    extra:'bi-plus-circle-fill', postre:'bi-cake2-fill'
+    pizza:'bi-circle-fill', 
+    preferida:'../img/pizza-slice-svgrepo-com.svg', 
+    deluxe:'../img/pizza-slice-svgrepo-com.svg',
+    bebida:'bi-cup-straw', 
+    entrada:'../img/chicken-leg-svgrepo-com.svg', 
+    snack:'../img/sausage-and-french-fries-svgrepo-com.svg',
+    extra:'bi-plus-circle-fill', 
+    postre:'bi-cake2-fill'
 };
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -36,10 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
     cargarProductosPOS();
     actualizarResumen();
     configurarEventos();
-    estadoCaja.montoInicial = 0;  // Empieza en 0; cajero lo ajusta si abre con efectivo
+    estadoCaja.montoInicial = 0;  
     mostrarEstadoCaja();
     actualizarVentasDia();
-    setInterval(actualizarVentasDia, 30000); // Actualizar ventas cada 30 s
+    setInterval(actualizarVentasDia, 30000); 
 });
 
 function _inyectarBotonModulos() {
@@ -81,11 +85,9 @@ async function cargarProductosPOS() {
         });
         catalogoGrupos = Object.values(mapa);
         renderizarProductos(catalogoGrupos);
-        // Cargar promos en caché para el filtro de POS
         try {
             var resP = await fetch(API_BASE + '/promociones?vigentes=true');
             var todasPromos = await resP.json();
-            // Solo mostrador o ambos (el POS es para ventas en local)
             _promosCache = todasPromos.filter(function(p) {
                 return p.condiciones === 'Mostrador' || p.condiciones === 'Ambos' || !p.condiciones;
             });
@@ -102,11 +104,16 @@ function renderizarProductos(lista) {
     if (!lista.length) { cont.innerHTML = '<p class="texto-secundario">Sin productos.</p>'; return; }
     lista.forEach(function (grp) {
         var iconoCls = ICONOS_POS[grp.categoria] || 'bi-box-fill';
+        
+        var iconoHTML = iconoCls.endsWith('.svg') 
+            ? '<img src="' + iconoCls + '" style="width: 1.3em; height: 1.3em; filter: invert(36%) sepia(85%) saturate(1487%) hue-rotate(334deg) brightness(97%) contrast(105%); margin-bottom: 4px;">' 
+            : '<i class="bi ' + iconoCls + '" style="font-size:1.3em;"></i>';
+
         var textoPrecio = grp.variaciones.length > 1 ? 'Desde $' + grp.precioBase : '$' + grp.precioBase;
         var col = document.createElement('div');
         col.className = 'col-6 col-md-4 col-lg-3';
         col.innerHTML = '<button class="btn-producto w-100" onclick="abrirModalProducto(\'' + grp.nombre.replace(/'/g, "\\'") + '\')">' +
-            '<i class="bi ' + iconoCls + '" style="font-size:1.3em;"></i>' +
+            iconoHTML +
             '<strong style="font-size:0.85em;line-height:1.2;display:block;margin-top:4px;">' + grp.nombre + '</strong>' +
             '<span class="precio-destacado" style="font-size:0.9em;">' + textoPrecio + '</span></button>';
         cont.appendChild(col);
@@ -118,7 +125,6 @@ function filtrarCategoriaPos(categoria, btnEl) {
     document.querySelectorAll('#filtros-pos .btn').forEach(function (b) { b.classList.remove('active'); });
     if (btnEl) { btnEl.classList.add('active'); }
 
-    // Filtro especial: Promociones
     if (categoria === 'promo') {
         renderPromocionesEnPOS();
         return;
@@ -141,7 +147,6 @@ function renderPromocionesEnPOS() {
         return;
     }
 
-    // Agrupar por nombre de campaña
     var grupos = {};
     _promosCache.forEach(function(pr) {
         if (!grupos[pr.nombre]) {
@@ -190,7 +195,7 @@ function renderPromocionesEnPOS() {
     });
 }
 
-var _posPromoGrupos = {};   // mapa idGrp → array de productos
+var _posPromoGrupos = {};   
 
 function agregarPackPromoPos(idGrp) {
     var productos = _posPromoGrupos[idGrp] || [];
@@ -302,10 +307,9 @@ async function procesarCobro() {
             return;
         }
         const data = await res.json();
-        // Marcar como Entregado de inmediato (venta en mostrador)
         await fetch(`${API_BASE}/pedidos/${data.idPedido}/estado`, {
             method: 'PATCH', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ estado: 'En cocina', idEmpleado: idCajero })  // Cocina lo marcará Entregado al terminar
+            body: JSON.stringify({ estado: 'En cocina', idEmpleado: idCajero })  
         });
         var conf    = document.getElementById('confirmacion-pago');
         var detText = document.getElementById('detalles-pago');
@@ -333,15 +337,11 @@ function cancelarVenta() {
     if (conf) conf.style.display = 'none';
 }
 
-
-// ── Ventas del día en tiempo real ────────────────────────────────────────────
-
 async function actualizarVentasDia() {
     try {
-        var hoyISO = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        var hoyISO = new Date().toISOString().split('T')[0]; 
         var res    = await fetch(API_BASE + '/pedidos?estado=Entregado', { headers: { Accept: 'application/json' } });
         var todos  = await res.json();
-        // Filtrar solo los de hoy (p.fecha viene como dd/MM/yyyy)
         var hoy = todos.filter(function (p) {
             if (!p.fecha) return false;
             var partes = p.fecha.split('/');
@@ -400,13 +400,10 @@ function configurarEventos() {
     if (btnCerrar)   btnCerrar.addEventListener('click', cerrarCaja);
 }
 
-// ── Pedidos Web ───────────────────────────────────────────────────────────────
-
 async function cargarPedidosWebPOS() {
     var tbody  = document.getElementById('tabla-pedidos-pos');
     if (!tbody) return;
 
-    // Mostrar modal solo si no está ya abierto (evita el doble backdrop)
     var modalEl = document.getElementById('modalPedidosWeb');
     var instancia = bootstrap.Modal.getInstance(modalEl);
     if (!instancia) new bootstrap.Modal(modalEl).show();
@@ -414,7 +411,6 @@ async function cargarPedidosWebPOS() {
     await _refrescarTablaPedidosWeb();
 }
 
-// Refresca el contenido de la tabla SIN recrear el modal (evita el modal oscuro)
 async function _refrescarTablaPedidosWeb() {
     var tbody = document.getElementById('tabla-pedidos-pos');
     if (!tbody) return;
@@ -450,7 +446,6 @@ async function _refrescarTablaPedidosWeb() {
 
 async function aceptarPedidoWebPOS(idPedido) {
     try {
-        // Guardar el cajero que aceptó el pedido web
         var idCajero = (_empleado && (_empleado.idEmpleado || _empleado.IdEmpleado))
             ? (_empleado.idEmpleado || _empleado.IdEmpleado) : null;
 
@@ -460,7 +455,6 @@ async function aceptarPedidoWebPOS(idPedido) {
         });
         if (res.ok) {
             mostrarNotificacion('Pedido <strong>' + idPedido + '</strong> enviado a cocina 🍕', 'success');
-            // Solo refrescar la tabla, NO recrear el modal
             await _refrescarTablaPedidosWeb();
         } else {
             alert('Error al aceptar el pedido.');
