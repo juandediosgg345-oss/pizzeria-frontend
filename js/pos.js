@@ -22,6 +22,19 @@ var ICONOS_POS = {
     postre:'bi-cake2-fill'
 };
 
+// Función para determinar las rebanadas según el tamaño
+function obtenerRebanadas(tamanio) {
+    if (!tamanio) return '';
+    var t = tamanio.toLowerCase();
+    if (t.includes('personal') || t.includes('mini') || t.includes('4 reb')) return '4 rebanadas';
+    if (t.includes('chica') || t.includes('pequeñ') || t.includes('6 reb')) return '6 rebanadas';
+    if (t.includes('mediana') || t.includes('8 reb')) return '8 rebanadas';
+    if (t.includes('grande') || t.includes('10 reb')) return '10 rebanadas';
+    if (t.includes('familiar') || t.includes('jumbo') || t.includes('12 reb')) return '12 rebanadas';
+    if (t.includes('mega') || t.includes('rectangular') || t.includes('fiesta') || t.includes('24 reb')) return '24 rebanadas';
+    return '';
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var cliente = JSON.parse(localStorage.getItem('clienteHawaiiana') || 'null');
     _empleado   = JSON.parse(localStorage.getItem('empleadoHawaiiana') || 'null');
@@ -218,9 +231,15 @@ function abrirModalProducto(nombreGrupo) {
     if (secTam) {
         if (grupoSeleccionado.variaciones.length > 1) {
             var botonesHTML = grupoSeleccionado.variaciones.map(function (v, i) {
+                
+                // --- SECCIÓN NUEVA: Agregar rebanadas en POS ---
+                var reb = obtenerRebanadas(v.tamanio);
+                var rebHTML = reb ? '<br><small style="font-size:0.8em; font-weight:normal; opacity:0.8;">' + reb + '</small>' : '';
+                // -----------------------------------------------
+                
                 return '<button type="button" class="btn btn-outline-secondary btn-sm' + (i === 0 ? ' active' : '') + '"' +
                     ' onclick="seleccionarVariacion(this,\'' + v.id + '\',' + v.precio + ',\'' + v.tamanio + '\')">' +
-                    v.tamanio + ' — $' + v.precio + '</button>';
+                    '<strong>' + v.tamanio + '</strong>' + rebHTML + '<br>$' + v.precio + '</button>';
             }).join('');
             secTam.innerHTML = '<label class="form-label texto-principal">Tamaño:</label>' +
                 '<div class="d-flex flex-wrap gap-1 mb-2">' + botonesHTML + '</div>';
