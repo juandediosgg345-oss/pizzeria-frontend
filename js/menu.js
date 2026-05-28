@@ -168,6 +168,11 @@ function renderPaginaProductos() {
     pagina.forEach(function (p) {
         var multiTam = p.variaciones.length > 1;
         var iconoCls = ICONOS_CAT[p.categoriaAPI] || 'bi-grid-fill';
+        
+        // --- NUEVA LÓGICA PARA RENDERIZAR IMÁGENES ---
+        var iconoHTML = iconoCls.endsWith('.svg') 
+            ? '<img src="' + iconoCls + '" style="width: 1em; height: 1em; filter: invert(36%) sepia(85%) saturate(1487%) hue-rotate(334deg) brightness(97%) contrast(105%); margin-bottom: 5px;">' 
+            : '<i class="bi ' + iconoCls + ' texto-acento"></i>';
 
         var badge = '';
         if (p.categoriaAPI === 'deluxe')   badge = '<span class="badge bg-warning text-dark ms-1" style="font-size:.68em;">Deluxe</span>';
@@ -186,7 +191,7 @@ function renderPaginaProductos() {
             '<div class="col-sm-6 col-lg-4 col-xl-3 mb-3">' +
             '<div class="tarjeta-pizza d-flex flex-column h-100">' +
             '<div style="font-size:2.8rem;text-align:center;margin-bottom:6px;">' +
-            '<i class="bi ' + iconoCls + ' texto-acento"></i></div>' +
+            iconoHTML + '</div>' + // <--- REEMPLAZA LA LÍNEA DEL ÍCONO AQUÍ
             '<h5 class="mb-1">' + p.nombre + badge + '</h5>' +
             '<p class="flex-grow-1 mb-2" style="font-size:.9em;color:var(--text-muted);">' + p.ingredientes + '</p>' +
             '<div class="d-flex align-items-center justify-content-between mt-auto">' +
