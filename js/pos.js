@@ -131,7 +131,6 @@ function filtrarCategoriaPos(categoria, btnEl) {
     }
 
     var resultado = categoria === 'todas' ? catalogoGrupos : catalogoGrupos.filter(function (g) {
-        if (categoria === 'pizza') return g.categoria === 'pizza' || g.categoria === 'preferida' || g.categoria === 'deluxe';
         return g.categoria === categoria;
     });
     renderizarProductos(resultado);
