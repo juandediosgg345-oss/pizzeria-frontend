@@ -8,6 +8,21 @@ function _prefijoCliente() {
     return window.location.pathname.indexOf('/negocio/') !== -1 ? '../cliente/' : '';
 }
 
+// Helper para marcar no disponible antes de salir
+async function _marcarNoDisponible() {
+    var emp = JSON.parse(localStorage.getItem('empleadoHawaiiana') || 'null');
+    if (emp && emp.cargo === 'Repartidor' && (emp.idRepartidor || emp.idEmpleado)) {
+        var idRep = emp.idRepartidor || emp.idEmpleado;
+        try {
+            await fetch('/api/repartidores/' + idRep + '/disponibilidad', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ estado: 'No disponible' })
+            });
+        } catch(e) {}
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
     var menuBtn     = document.getElementById('btn-mobile-menu');
@@ -47,10 +62,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var offMobile = document.getElementById('menuMobile');
     if (offMobile) {
         offMobile.querySelectorAll('a.menu-item-peligro[href="empleado.html"]').forEach(function (link) {
-            link.addEventListener('click', function (e) {
+            link.addEventListener('click', async function (e) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
                 if (confirm('¿Cerrar sesión?')) {
+                    await _marcarNoDisponible();
                     localStorage.removeItem('empleadoHawaiiana');
                     window.location.href = 'empleado.html';
                 }
@@ -88,8 +104,9 @@ function mostrarSesionEnNavbar() {
             btnCerrar.className = 'btn btn-outline-danger btn-sm';
             btnCerrar.title     = 'Cerrar sesión';
             btnCerrar.innerHTML = '<i class="bi bi-box-arrow-right"></i>';
-            btnCerrar.addEventListener('click', function () {
+            btnCerrar.addEventListener('click', async function () {
                 if (confirm('¿Cerrar sesión?')) {
+                    await _marcarNoDisponible();
                     localStorage.removeItem('clienteHawaiiana');
                     localStorage.removeItem('empleadoHawaiiana');
                     // Logout de empleado → empleado.html / Logout de cliente → cuenta.html
@@ -122,8 +139,9 @@ function _rutaEmpleado(cargo) {
 }
 
 // Cierra sesión del empleado con confirmación (usable desde cualquier panel)
-window.cerrarSesionEmpleado = function () {
+window.cerrarSesionEmpleado = async function () {
     if (!confirm('¿Cerrar sesión?')) return;
+    await _marcarNoDisponible();
     localStorage.removeItem('empleadoHawaiiana');
     window.location.href = _prefijoNegocio() + 'empleado.html';
 };
@@ -161,8 +179,6 @@ window.mostrarNotificacion = function (msg, tipo, ms) {
 };
 
 // Muestra una pantalla de error de acceso restringido con botón de regreso.
-// Se usa cuando un cliente intenta acceder a un panel de empleado, o
-// un empleado sin el cargo adecuado intenta acceder a un módulo restringido.
 window.mostrarErrorAcceso = function (mensaje, urlRegreso) {
     document.body.style.overflow = 'hidden';
     var overlay       = document.createElement('div');
@@ -209,7 +225,8 @@ window.limpiarDatos = function () {
 
     function resetTimer() {
         clearTimeout(timer);
-        timer = setTimeout(function () {
+        timer = setTimeout(async function () {
+            await _marcarNoDisponible();
             localStorage.removeItem('empleadoHawaiiana');
             alert('Tu sesión expiró por inactividad. Ingresa de nuevo.');
             window.location.href = _prefijoNegocio() + 'empleado.html';
