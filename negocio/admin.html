@@ -27,9 +27,14 @@
             <img src="../img/pizza.png" alt="Logo pizzería" width="40">
             <span class="d-none d-sm-inline ms-1">Admin - La Hawaiiana</span>
         </a>
-        <button class="navbar-toggler d-lg-none" type="button" id="btn-mobile-menu" aria-label="Abrir menú">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        
+        <!-- Botón Hamburguesa Corregido para Móvil -->
+        <div class="d-flex align-items-center gap-2 d-lg-none">
+            <button class="navbar-toggler" type="button" id="btn-mobile-menu" data-bs-toggle="offcanvas" data-bs-target="#menuMobile" aria-controls="menuMobile" aria-label="Abrir menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
         <div class="d-none d-lg-flex ms-auto align-items-center gap-2">
             <span id="nav-nombre-empleado" class="nav-link texto-principal"></span>
             <button id="btn-tema" class="btn-rojo">Cambiar Tema</button>
