@@ -20,7 +20,6 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid px-4">
         <a class="navbar-brand" href="pos.html">
@@ -37,7 +36,6 @@
     </div>
 </nav>
 
-<!-- MENÚ MÓVIL -->
 <div class="offcanvas offcanvas-end offcanvas-menu" tabindex="-1" id="menuMobile">
     <div class="offcanvas-header">
         <span class="offcanvas-title">
@@ -59,14 +57,11 @@
     </div>
 </div>
 
-<!-- CONTENIDO PRINCIPAL -->
 <div class="container-fluid px-4 mt-4 pb-5">
 
-    <!-- Barra de estado de caja -->
     <div class="alert alert-info mb-4 py-2">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
 
-            <!-- Izquierda: estado y métricas -->
             <div class="d-flex align-items-center gap-4 flex-wrap">
                 <div>
                     <small class="d-block text-muted" style="font-size:.75em;">ESTADO</small>
@@ -85,7 +80,6 @@
                 </div>
             </div>
 
-            <!-- Derecha: acciones de caja -->
             <div class="d-flex gap-2 flex-shrink-0">
                 <button class="btn btn-sm btn-primary" onclick="cargarPedidosWebPOS()">
                     <i class="bi bi-bell-fill"></i> Pedidos Web
@@ -98,10 +92,8 @@
         </div>
     </div>
 
-    <!-- Layout: catálogo | resumen de venta -->
     <div class="contenedor-pos">
 
-        <!-- Catálogo con filtros -->
         <div>
             <h3 class="texto-principal mb-3">Selecciona Productos</h3>
             <div class="d-flex flex-wrap gap-2 mb-3" id="filtros-pos">
@@ -110,16 +102,28 @@
                     <i class="bi bi-list-ul"></i> Todas
                 </button>
                 <button type="button" class="btn btn-outline-secondary btn-sm"
-                        onclick="filtrarCategoriaPos('pizza',this)">
-                    <i class="bi bi-circle-fill"></i> Pizzas
+                        onclick="filtrarCategoriaPos('preferida',this)">
+                    <img src="../img/pizza-slice-svgrepo-com.svg" width="16" style="vertical-align: text-bottom;"> Preferidas
                 </button>
                 <button type="button" class="btn btn-outline-secondary btn-sm"
-                        onclick="filtrarCategoriaPos('bebida',this)">
-                    <i class="bi bi-cup-straw"></i> Bebidas
+                        onclick="filtrarCategoriaPos('deluxe',this)">
+                    <img src="../img/pizza-slice-svgrepo-com.svg" width="16" style="vertical-align: text-bottom;"> Deluxe
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm"
+                        onclick="filtrarCategoriaPos('snack',this)">
+                    <img src="../img/sausage-and-french-fries-svgrepo-com.svg" width="16" style="vertical-align: text-bottom;"> Snacks
                 </button>
                 <button type="button" class="btn btn-outline-secondary btn-sm"
                         onclick="filtrarCategoriaPos('entrada',this)">
-                    <img src="../img/chicken-leg-svgrepo-com.svg" width="16" style="vertical-align: text-bottom;"> Entradas
+                    <img src="../img/chicken-leg-svgrepo-com.svg" width="16" style="vertical-align: text-bottom;"> Alitas
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm"
+                        onclick="filtrarCategoriaPos('extra',this)">
+                    <i class="bi bi-plus-circle-fill"></i> Extras
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm"
+                        onclick="filtrarCategoriaPos('bebida',this)">
+                    <i class="bi bi-cup-straw"></i> Refrescos
                 </button>
                 <button type="button" class="btn btn-outline-danger btn-sm"
                         onclick="filtrarCategoriaPos('promo',this)">
@@ -129,7 +133,6 @@
             <div class="row g-2" id="grid-productos-pos"></div>
         </div>
 
-        <!-- Resumen de venta actual -->
         <div class="tarjeta-tema p-4 shadow-sm resumen-venta">
             <h4 class="texto-principal mb-3">
                 <i class="bi bi-receipt"></i> Venta Actual
@@ -168,7 +171,6 @@
     </div>
 </div>
 
-<!-- MODAL: Cantidad y observaciones -->
 <div class="modal fade" id="modalCantidad" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content tarjeta-tema">
@@ -198,7 +200,6 @@
     </div>
 </div>
 
-<!-- MODAL: Pedidos web pendientes -->
 <div class="modal fade" id="modalPedidosWeb" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content tarjeta-tema">
