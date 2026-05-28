@@ -1,20 +1,16 @@
-// menu.js — Catálogo con paginación y fichas de pack para promociones
 var API_BASE = '/api';
 
-// Catálogo
 var pizzas           = [];
-var _productoMap     = {};   // idProducto → { nombre, precio, tamanio, categoriaAPI }
+var _productoMap     = {};   
 var _idsEnPromo      = [];
-var _promoGrupos     = {};   // Agrupados por nombre de campaña
+var _promoGrupos     = {};   
 
-// Estado UI
 var filtroActivo          = 'todas';
 var textoBusqueda         = '';
 var _listaFiltrada        = [];
 var _paginaActual         = 1;
 var _porPagina            = 12;
 
-// Modal
 var productoSeleccionado  = null;
 var variacionSeleccionada = null;
 
@@ -23,12 +19,10 @@ var ICONOS_CAT = {
     preferida:'../img/pizza-round-svgrepo-com.svg', 
     deluxe:'../img/pizza-round-svgrepo-com.svg',
     bebida:'bi-cup-straw', 
-    entrada:'../img/chicken-leg-svgrepo-com.svg', // Nota: alita entra como 'entrada' en la API
+    entrada:'../img/chicken-leg-svgrepo-com.svg', 
     snack:'../img/sausage-and-french-fries-svgrepo-com.svg', 
     extra:'bi-plus-circle-fill'
 };
-
-// ── Carga del catálogo ────────────────────────────────────────────────────────
 
 async function cargarCatalogoDesdeAPI() {
     var cont = document.getElementById('contenedor-pizzas');
@@ -57,11 +51,9 @@ async function cargarCatalogoDesdeAPI() {
 
         pizzas = Object.values(mapaAgrupado);
 
-        // Cargar promociones vigentes
         try {
             var resP = await fetch(API_BASE + '/promociones?vigentes=true');
             var promos = await resP.json();
-            // Menú cliente: solo promos de Domicilio o Ambos (Mostrador es solo para POS)
             var promosFiltradas = promos.filter(function (pr) {
                 return !pr.condiciones || pr.condiciones !== 'Mostrador';
             });
@@ -85,8 +77,6 @@ async function cargarCatalogoDesdeAPI() {
             'Verifica que el servidor esté corriendo.</div></div>';
     }
 }
-
-// ── Filtrado ──────────────────────────────────────────────────────────────────
 
 function aplicarFiltros() {
     if (filtroActivo === 'promo') {
@@ -140,8 +130,6 @@ function limpiarFiltros() {
     aplicarFiltros();
 }
 
-// ── Render del grid con paginación ────────────────────────────────────────────
-
 function renderPaginaProductos() {
     var cont          = document.getElementById('contenedor-pizzas');
     var sinResultados = document.getElementById('sin-resultados');
@@ -169,7 +157,6 @@ function renderPaginaProductos() {
         var multiTam = p.variaciones.length > 1;
         var iconoCls = ICONOS_CAT[p.categoriaAPI] || 'bi-grid-fill';
         
-        // --- NUEVA LÓGICA PARA RENDERIZAR IMÁGENES ---
         var iconoHTML = iconoCls.endsWith('.svg') 
             ? '<img src="' + iconoCls + '" style="width: 1em; height: 1em; filter: invert(36%) sepia(85%) saturate(1487%) hue-rotate(334deg) brightness(97%) contrast(105%); margin-bottom: 5px;">' 
             : '<i class="bi ' + iconoCls + ' texto-acento"></i>';
@@ -191,7 +178,7 @@ function renderPaginaProductos() {
             '<div class="col-sm-6 col-lg-4 col-xl-3 mb-3">' +
             '<div class="tarjeta-pizza d-flex flex-column h-100">' +
             '<div style="font-size:2.8rem;text-align:center;margin-bottom:6px;">' +
-            iconoHTML + '</div>' + // <--- REEMPLAZA LA LÍNEA DEL ÍCONO AQUÍ
+            iconoHTML + '</div>' +
             '<h5 class="mb-1">' + p.nombre + badge + '</h5>' +
             '<p class="flex-grow-1 mb-2" style="font-size:.9em;color:var(--text-muted);">' + p.ingredientes + '</p>' +
             '<div class="d-flex align-items-center justify-content-between mt-auto">' +
@@ -200,18 +187,15 @@ function renderPaginaProductos() {
             '</div></div></div>';
     });
 
-    // Paginación Bootstrap centrada
     if (navCont) {
         if (totalPags <= 1) {
             navCont.innerHTML = '';
         } else {
             var items = '';
 
-            // Anterior
             items += '<li class="page-item' + (_paginaActual === 1 ? ' disabled' : '') + '">' +
                 '<button class="page-link" ' + (_paginaActual > 1 ? 'onclick="irPaginaMenu(' + (_paginaActual - 1) + ')"' : '') + '>‹ Anterior</button></li>';
 
-            // Números (máx 5 visibles)
             var ini = Math.max(1, _paginaActual - 2);
             var fin = Math.min(totalPags, ini + 4);
             if (fin - ini < 4) ini = Math.max(1, fin - 4);
@@ -229,7 +213,6 @@ function renderPaginaProductos() {
                 items += '<li class="page-item"><button class="page-link" onclick="irPaginaMenu(' + totalPags + ')">' + totalPags + '</button></li>';
             }
 
-            // Siguiente
             items += '<li class="page-item' + (_paginaActual === totalPags ? ' disabled' : '') + '">' +
                 '<button class="page-link" ' + (_paginaActual < totalPags ? 'onclick="irPaginaMenu(' + (_paginaActual + 1) + ')"' : '') + '>Siguiente ›</button></li>';
 
@@ -245,12 +228,9 @@ function renderPaginaProductos() {
 function irPaginaMenu(n) {
     _paginaActual = n;
     renderPaginaProductos();
-    // Scroll suave al inicio del grid
     var cont = document.getElementById('contenedor-pizzas');
     if (cont) cont.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-
-// ── Fichas de Promoción (pack completo) ───────────────────────────────────────
 
 function mostrarPromociones(termino) {
     var cont          = document.getElementById('contenedor-pizzas');
@@ -367,8 +347,6 @@ function agregarPromoAlCarrito(grupoId, promoNombre, porcentajeDes) {
     }
 }
 
-// ── Carrito local ─────────────────────────────────────────────────────────────
-
 var CLAVE = 'carritoHawaiiana';
 function obtenerCarrito() { try { return JSON.parse(localStorage.getItem(CLAVE) || '[]'); } catch (e) { return []; } }
 function guardarCarrito(c) { localStorage.setItem(CLAVE, JSON.stringify(c)); actualizarBadge(); }
@@ -383,7 +361,6 @@ function actualizarBadge() {
 function agregarAlCarrito(productoGrp, variacion, cantidad, nota) {
     if (!variacion) variacion = productoGrp.variaciones[0];
     nota = (nota && nota.trim()) ? nota.trim() : null;
-    // Si tiene nota diferente, clave única para no mezclar items
     var clave = variacion.id + (nota ? '__' + nota.substring(0, 8).replace(/\s/g, '_') : '');
     var carrito = obtenerCarrito();
     var exist = carrito.find(function (i) { return i.clave === clave; });
@@ -392,7 +369,7 @@ function agregarAlCarrito(productoGrp, variacion, cantidad, nota) {
         clave: clave, id: variacion.id, nombre: productoGrp.nombre,
         tamanio: variacion.tamanio === 'Único' ? '' : variacion.tamanio,
         precio: variacion.precio, cantidad: cantidad,
-        observaciones: nota  // Guardar nota como observaciones
+        observaciones: nota 
     });
     guardarCarrito(carrito);
     mostrarToast(productoGrp.nombre + (variacion.tamanio !== 'Único' ? ' (' + variacion.tamanio + ')' : '') + ' agregado.');
@@ -404,8 +381,6 @@ function agregarDirecto(nombre) {
     agregarAlCarrito(p, p.variaciones[0], 1);
 }
 
-// ── Toast ─────────────────────────────────────────────────────────────────────
-
 function mostrarToast(msg) {
     var t = document.getElementById('toast-carrito');
     var m = document.getElementById('toast-mensaje');
@@ -415,8 +390,6 @@ function mostrarToast(msg) {
     clearTimeout(t._timer);
     t._timer = setTimeout(function () { t.classList.remove('mostrar'); }, 3000);
 }
-
-// ── Modal de tamaño ───────────────────────────────────────────────────────────
 
 function abrirModal(nombreProducto) {
     productoSeleccionado = pizzas.find(function (p) { return p.nombre === nombreProducto; });
@@ -428,7 +401,6 @@ function abrirModal(nombreProducto) {
     if (cont) {
         cont.innerHTML = '';
         if (productoSeleccionado.variaciones.length > 1) {
-            // Múltiples tamaños: mostrar botones de selección
             productoSeleccionado.variaciones.forEach(function (v) {
                 var btn = document.createElement('button');
                 btn.type = 'button';
@@ -442,7 +414,6 @@ function abrirModal(nombreProducto) {
                 cont.appendChild(btn);
             });
         } else {
-            // Tamaño único: mostrar precio sin botones
             cont.innerHTML = '<p class="texto-principal mb-0"><span class="precio-destacado fs-5">$' +
                 variacionSeleccionada.precio + '</span></p>';
         }
@@ -461,8 +432,6 @@ function confirmarAgregarPizza() {
     agregarAlCarrito(productoSeleccionado, variacionSeleccionada, cant < 1 ? 1 : cant, nota);
     bootstrap.Modal.getInstance(document.getElementById('modalPedirPizza')).hide();
 }
-
-// ── Inicialización ────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', function () {
     cargarCatalogoDesdeAPI();
